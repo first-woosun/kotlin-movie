@@ -38,14 +38,6 @@ class Controller(
             reservations.addReservation(reservation)
         } while (continueReserve())
 
-        val reservation = makeReserve(reservations)
-        reservations.addReservation(reservation)
-
-        while (continueReserve()) {
-            val newReservation = makeReserve(reservations)
-            reservations.addReservation(newReservation)
-        }
-
         payProcessor(reservations)
     }
 
