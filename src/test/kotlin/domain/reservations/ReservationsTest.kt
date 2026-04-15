@@ -6,6 +6,9 @@ import domain.movie.itmes.ScreeningPeriod
 import domain.movie.itmes.Title
 import domain.reservations.items.Reservation
 import domain.seat.Seat
+import domain.seat.items.ColumnNumber
+import domain.seat.items.RowNumber
+import domain.seat.items.SeatGrade
 import domain.timetable.items.ScreenTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
@@ -77,7 +80,19 @@ class ReservationsTest {
                             endTime = LocalTime.of(13, 0),
                             screeningDate = LocalDate.of(2026, 4, 10),
                         ),
-                    seats = listOf(Seat("A1"), Seat("B1")),
+                    seats =
+                        listOf<Seat>(
+                            Seat(
+                                rowNumber = RowNumber("A"),
+                                columnNumber = ColumnNumber(1),
+                                seatGrade = SeatGrade.GradeB
+                            ),
+                            Seat(
+                                rowNumber = RowNumber("B"),
+                                columnNumber = ColumnNumber(1),
+                                seatGrade = SeatGrade.GradeS
+                            ),
+                        ),
                 ),
             )
         }

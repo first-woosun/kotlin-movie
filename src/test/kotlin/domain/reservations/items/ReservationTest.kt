@@ -5,6 +5,9 @@ import domain.movie.itmes.RunningTime
 import domain.movie.itmes.ScreeningPeriod
 import domain.movie.itmes.Title
 import domain.seat.Seat
+import domain.seat.items.ColumnNumber
+import domain.seat.items.RowNumber
+import domain.seat.items.SeatGrade
 import domain.timetable.items.ScreenTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -32,8 +35,16 @@ class ReservationTest {
                 ),
             seats =
                 listOf<Seat>(
-                    Seat("A1"),
-                    Seat("B1"),
+                    Seat(
+                        rowNumber = RowNumber("A"),
+                        columnNumber = ColumnNumber(1),
+                        seatGrade = SeatGrade.GradeB
+                    ),
+                    Seat(
+                        rowNumber = RowNumber("B"),
+                        columnNumber = ColumnNumber(1),
+                        seatGrade = SeatGrade.GradeS
+                    ),
                 ),
         )
 
