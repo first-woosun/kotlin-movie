@@ -49,8 +49,9 @@ object InputView {
         require(value.isNotBlank()) { LABEL.BLANK_ERROR }
         val numbers = value.split(",").map { it.trim() }
         numbers.forEach {
-            require(it.matches(Regex("^[A-Z][0-9]+$"))) { LABEL.INVALID_SEAT_NUMBER_FORMAT_ERROR }
+            require(it.matches(Regex("^[A-E][1-4]$"))) { LABEL.INVALID_SEAT_NUMBER_FORMAT_ERROR }
         }
+
         return numbers
     }
 

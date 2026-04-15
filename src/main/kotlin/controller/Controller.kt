@@ -12,6 +12,9 @@ import domain.point.Point
 import domain.reservations.Reservations
 import domain.reservations.items.Reservation
 import domain.seat.Seat
+import domain.seat.items.ColumnNumber
+import domain.seat.items.RowNumber
+import domain.seat.items.SeatGrade
 import domain.timetable.MockTimeTable
 import domain.timetable.TimeTable
 import domain.timetable.items.Screen
@@ -119,7 +122,18 @@ class Controller(
             }
             val seats = mutableListOf<Seat>()
             seatNumbers.forEach {
-                seats.add(Seat(it))
+                val rowNumber = RowNumber(it.substring(0, 1))
+                val columnNumber = ColumnNumber(it.substring(2).toInt())
+                val seatGrade = when (rowNumber.rowNumber) {
+                    in setOf("A", "B") -> SeatGrade.GradeB
+                    in setOf("C", "D") -> SeatGrade.GradeS
+                    else -> SeatGrade.GradeA
+                }
+                seats.add(Seat(
+                    rowNumber = rowNumber,
+                    columnNumber = columnNumber,
+                    seatGrade = seatGrade
+                ))
             }
             return seats.toList()
         } catch (e: IllegalArgumentException) {
