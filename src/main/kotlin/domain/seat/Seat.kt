@@ -32,7 +32,7 @@ class Seat(
         return columnNumber.isSame(col) && rowNumber.isSame(row)
     }
 
-    fun getPrice(): Money = seatGrade.getPrice()
+    fun getPrice(): Money = seatGrade.price
 
     fun getSeatNumber(): String = rowNumber.getRow() + columnNumber.getColum()
 }
