@@ -32,11 +32,12 @@ class Reservation(
         return totalPrice
     }
 
-    fun getReservationSummary(): String {
-        val title = movie.getTitle()
-        val date = screenTime.screeningDateToString()
-        val time = screenTime.startTimeToString()
-        val seatNumbers = seats.joinToString(separator = ", ") { it.getSeatNumber() }
-        return "[$title] $date $time 좌석: $seatNumbers"
+    fun getReservationInfo(): ReservationInfo {
+        return ReservationInfo(
+            title = movie.getTitleText(),
+            startTime = screenTime.startTime,
+            screeningDate = screenTime.screeningDate,
+            seats = seats,
+        )
     }
 }

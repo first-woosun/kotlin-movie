@@ -53,7 +53,9 @@ object OutputView {
     }
 
     fun printReservationSummary(reservation: Reservation) {
-        println("- ${reservation.getReservationSummary()}")
+        val reservationInfo = reservation.getReservationInfo()
+        val seats = reservationInfo.seats
+        println("- [${reservationInfo.title}] ${reservationInfo.screeningDate} ${reservationInfo.startTime} ${seats.joinToString(separator = ", ") { it.getSeatNumber() }}")
     }
 
     fun printError(error: String) {
