@@ -1,27 +1,29 @@
 package domain.discountpolicy
 
 import domain.money.Money
-import domain.reservations.items.Reservation
+import domain.timetable.items.ScreenTime
+import java.time.LocalTime
 
 interface DiscountPolicy {
-    val condition: DiscountCondition
-
     fun applyDiscount(
         price: Money,
-        reservation: Reservation,
+        screenTime: ScreenTime
     ): Money
 }
 
 class TimeDiscountPolicy(
-    override val condition: DiscountCondition,
     private val discountAmount: Money,
 ) : DiscountPolicy {
+    private val timeCondition = listOf(
+        LocalTime.of(11, 0),
+        LocalTime.of(20, 0)
+    )
+
     override fun applyDiscount(
         price: Money,
-        reservation: Reservation,
+        screenTime: ScreenTime,
     ): Money {
-        val info = reservation.getReservationInfo()
-        if (condition.isSatisfiedBy(info)) {
+        if (screenTime.isStartBefore(timeCondition[0]) || screenTime.isStartAfter(timeCondition[1])) {
             return price - discountAmount
         }
         return price
@@ -29,16 +31,15 @@ class TimeDiscountPolicy(
 }
 
 class MovieDayDiscountPolicy(
-    override val condition: DiscountCondition,
     private val discountRate: Double,
 ) : DiscountPolicy {
+    private val movieDay = listOf(10, 20, 30)
     override fun applyDiscount(
         price: Money,
-        reservation: Reservation,
+        screenTime: ScreenTime
     ): Money {
-        val info = reservation.getReservationInfo()
-        if (condition.isSatisfiedBy(info)) {
-            return price * discountRate
+        movieDay.forEach {
+            if (screenTime.isSameDate(it)) return price * discountRate
         }
         return price
     }
