@@ -2,12 +2,12 @@ package controller
 
 import domain.discountpolicy.CardDiscountPolicy
 import domain.discountpolicy.CashDiscountPolicy
-import domain.discountpolicy.DiscountPolicy
+import domain.discountpolicy.MovieDayDiscountPolicy
 import domain.discountpolicy.PayMethod
 import domain.discountpolicy.PayMethodDiscountPolicy
+import domain.discountpolicy.TimeDiscountPolicy
 import domain.money.Money
 import domain.movie.itmes.Title
-import domain.paycalculator.PayCalculator
 import domain.point.Point
 import domain.reservations.Reservations
 import domain.reservations.items.Reservation
@@ -23,7 +23,8 @@ import java.time.LocalDate
 class Controller(
     val inputView: InputView,
     val outputView: OutputView,
-    val discountPolicies: List<DiscountPolicy>,
+    val timeDiscountPolicy: TimeDiscountPolicy,
+    val movieDayDiscountPolicy: MovieDayDiscountPolicy,
     val cardDiscountPolicy: CardDiscountPolicy,
     val cashDiscountPolicy: CashDiscountPolicy,
     val timeTable: TimeTable = TimeTable(MockTimeTable.timeTable),
@@ -45,7 +46,7 @@ class Controller(
         try {
             return inputView.readStartReserve()
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return startReserve()
         }
     }
@@ -70,7 +71,7 @@ class Controller(
             val title = Title(inputView.readMovieTitle())
             return timeTable.getMovieSchedulesWithTitle(title)
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return searchMovieWithTitle()
         }
     }
@@ -81,7 +82,7 @@ class Controller(
             val localDate = LocalDate.of(date[0], date[1], date[2])
             return timeTable.getMovieSchedulesWithDate(localDate)
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return searchMovieWithDate(timeTable)
         }
     }
@@ -96,11 +97,12 @@ class Controller(
             val selectedSchedule = timeTable.getScheduleWithIndex(index - 1)
 
             if (reservations.checkDuplicate(selectedSchedule.getScreenTime())) {
-                throw IllegalArgumentException("선택하신 상영 시간이 겹칩니다. 다른 시간을 선택해 주세요.")
+                outputView.printError("선택하신 상영 시간이 겹칩니다. 다른 시간을 선택해 주세요.")
+                return selectMovieSchedule(timeTable, reservations)
             }
             return selectedSchedule
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return selectMovieSchedule(timeTable, reservations)
         }
     }
@@ -111,7 +113,8 @@ class Controller(
             val seatNumbers = inputView.readSeatNumber()
             seatNumbers.forEach {
                 if (screeningSchedule.isReservedSeat(it)) {
-                    throw IllegalArgumentException("해당 좌석은 이미 예매되어 있습니다.")
+                    outputView.printError("해당 좌석은 이미 예매되어 있습니다.")
+                    return selectSeats(screeningSchedule)
                 }
             }
             val seats = mutableListOf<Seat>()
@@ -120,7 +123,7 @@ class Controller(
             }
             return seats.toList()
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return selectSeats(screeningSchedule)
         }
     }
@@ -129,7 +132,7 @@ class Controller(
         try {
             return inputView.readContinue()
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return continueReserve()
         }
     }
@@ -137,12 +140,10 @@ class Controller(
     fun payProcessor(reservations: Reservations) {
         val reservationItems = reservations.reservations
         outputView.printFinalReservations(reservationItems)
-        val payCalculator = PayCalculator()
 
-        val initPrice = payCalculator.calculateInitPrice(reservationItems)
-        val discountedPrice = payCalculator.calculateTimeDiscountedPrice(initPrice, reservationItems, discountPolicies)
-        val pointAppliedPrice = usePoint(discountedPrice, payCalculator)
-        val finalPrice = applyPayMethodDiscount(pointAppliedPrice, payCalculator)
+        val totalPrice = reservations.getDiscountedTotalPrice(timeDiscountPolicy, movieDayDiscountPolicy)
+        val pointAppliedPrice = usePoint(totalPrice)
+        val finalPrice = applyPayMethodDiscount(pointAppliedPrice)
 
         outputView.printFinalPrice(finalPrice.getAmount())
 
@@ -158,21 +159,24 @@ class Controller(
         try {
             return Point(inputView.readUsePoint())
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return getUsePoint()
         }
     }
 
     fun usePoint(
-        price: Money,
-        payCalculator: PayCalculator,
+        price: Money
     ): Money {
         try {
             val point = getUsePoint()
-            return payCalculator.usePoint(price, point)
+            if (point.isBiggerThan(price.amount)) {
+                outputView.printError("사용할 포인트는 금액보다 클 수 없습니다.")
+                return usePoint(price)
+            }
+            return price.applyPoint(point.amount)
         } catch (e: IllegalArgumentException) {
-            println(e.message)
-            return usePoint(price, payCalculator)
+            outputView.printError(e.message!!)
+            return usePoint(price)
         }
     }
 
@@ -184,16 +188,15 @@ class Controller(
                 PayMethod.CASH -> cashDiscountPolicy
             }
         } catch (e: IllegalArgumentException) {
-            println(e.message)
+            outputView.printError(e.message!!)
             return getUsePayMethod()
         }
     }
 
     fun applyPayMethodDiscount(
-        price: Money,
-        payCalculator: PayCalculator,
+        price: Money
     ): Money {
         val payMethodDiscountPolicy = getUsePayMethod()
-        return payCalculator.usePayMethod(price, payMethodDiscountPolicy)
+        return price.applyPayMethod(payMethodDiscountPolicy)
     }
 }
