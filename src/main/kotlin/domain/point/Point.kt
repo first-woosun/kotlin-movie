@@ -1,7 +1,5 @@
 package domain.point
 
-import domain.money.Money
-
 @JvmInline
 value class Point(
     val amount: Int,

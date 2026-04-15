@@ -124,16 +124,19 @@ class Controller(
             seatNumbers.forEach {
                 val rowNumber = RowNumber(it.substring(0, 1))
                 val columnNumber = ColumnNumber(it.substring(2).toInt())
-                val seatGrade = when (rowNumber.rowNumber) {
-                    in setOf("A", "B") -> SeatGrade.GradeB
-                    in setOf("C", "D") -> SeatGrade.GradeS
-                    else -> SeatGrade.GradeA
-                }
-                seats.add(Seat(
-                    rowNumber = rowNumber,
-                    columnNumber = columnNumber,
-                    seatGrade = seatGrade
-                ))
+                val seatGrade =
+                    when (rowNumber.rowNumber) {
+                        in setOf("A", "B") -> SeatGrade.GradeB
+                        in setOf("C", "D") -> SeatGrade.GradeS
+                        else -> SeatGrade.GradeA
+                    }
+                seats.add(
+                    Seat(
+                        rowNumber = rowNumber,
+                        columnNumber = columnNumber,
+                        seatGrade = seatGrade,
+                    ),
+                )
             }
             return seats.toList()
         } catch (e: IllegalArgumentException) {
@@ -178,9 +181,7 @@ class Controller(
         }
     }
 
-    fun usePoint(
-        price: Money
-    ): Money {
+    fun usePoint(price: Money): Money {
         try {
             val point = getUsePoint()
             if (point.isBiggerThan(price.amount)) {
@@ -207,9 +208,7 @@ class Controller(
         }
     }
 
-    fun applyPayMethodDiscount(
-        price: Money
-    ): Money {
+    fun applyPayMethodDiscount(price: Money): Money {
         val payMethodDiscountPolicy = getUsePayMethod()
         return price.applyPayMethod(payMethodDiscountPolicy)
     }

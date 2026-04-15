@@ -201,7 +201,7 @@ class ScreeningScheduleTest {
             Seat(
                 rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(1),
-                seatGrade = SeatGrade.GradeA
+                seatGrade = SeatGrade.GradeA,
             )
         reservationSchedule.reserveSeat(reserveSeat)
 

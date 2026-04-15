@@ -8,5 +8,4 @@ enum class SeatGrade(
     GradeS(Money(18000)),
     GradeA(Money(15000)),
     GradeB(Money(13000)),
-    ;
 }

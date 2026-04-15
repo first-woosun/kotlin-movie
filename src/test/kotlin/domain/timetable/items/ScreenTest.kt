@@ -13,26 +13,28 @@ class ScreenTest {
             Seat(
                 rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(1),
-                seatGrade = SeatGrade.GradeA
+                seatGrade = SeatGrade.GradeA,
             ),
             Seat(
                 rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(2),
-                seatGrade = SeatGrade.GradeA
+                seatGrade = SeatGrade.GradeA,
             ),
             Seat(
                 rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(3),
-                seatGrade = SeatGrade.GradeA
+                seatGrade = SeatGrade.GradeA,
             ),
             Seat(
                 rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(4),
-                seatGrade = SeatGrade.GradeA
+                seatGrade = SeatGrade.GradeA,
             ),
-            Seat(rowNumber = RowNumber("A"),
+            Seat(
+                rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(5),
-                seatGrade = SeatGrade.GradeA),
+                seatGrade = SeatGrade.GradeA,
+            ),
         )
 
     @Test

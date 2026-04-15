@@ -26,7 +26,7 @@ class Reservations {
 
     fun getDiscountedTotalPrice(
         timeDiscountPolicy: TimeDiscountPolicy,
-        movieDayDiscountPolicy: MovieDayDiscountPolicy
+        movieDayDiscountPolicy: MovieDayDiscountPolicy,
     ): Money {
         var price = Money(0)
         _reservations.forEach {

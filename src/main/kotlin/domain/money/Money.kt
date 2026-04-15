@@ -1,7 +1,6 @@
 package domain.money
 
 import domain.discountpolicy.PayMethodDiscountPolicy
-import domain.point.Point
 
 @JvmInline
 value class Money(
@@ -13,13 +12,9 @@ value class Money(
 
     fun getAmount() = amount
 
-    fun applyPoint(pointAmount: Int): Money {
-        return Money(amount - pointAmount)
-    }
+    fun applyPoint(pointAmount: Int): Money = Money(amount - pointAmount)
 
-    fun applyPayMethod(payMethodDiscountPolicy: PayMethodDiscountPolicy): Money {
-        return payMethodDiscountPolicy.applyDiscount(this)
-    }
+    fun applyPayMethod(payMethodDiscountPolicy: PayMethodDiscountPolicy): Money = payMethodDiscountPolicy.applyDiscount(this)
 
     operator fun plus(other: Money): Money = Money(amount + other.amount)
 

@@ -20,7 +20,7 @@ class Reservation(
 
     fun price(
         timeDiscountPolicy: TimeDiscountPolicy,
-        movieDayDiscountPolicy: MovieDayDiscountPolicy
+        movieDayDiscountPolicy: MovieDayDiscountPolicy,
     ): Money {
         var totalPrice = Money(0)
         seats.forEach {
@@ -32,12 +32,11 @@ class Reservation(
         return totalPrice
     }
 
-    fun getReservationInfo(): ReservationInfo {
-        return ReservationInfo(
+    fun getReservationInfo(): ReservationInfo =
+        ReservationInfo(
             title = movie.getTitleText(),
             startTime = screenTime.startTime,
             screeningDate = screenTime.screeningDate,
             seats = seats,
         )
-    }
 }

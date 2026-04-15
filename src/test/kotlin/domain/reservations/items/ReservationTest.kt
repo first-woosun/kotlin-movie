@@ -38,12 +38,12 @@ class ReservationTest {
                     Seat(
                         rowNumber = RowNumber("A"),
                         columnNumber = ColumnNumber(1),
-                        seatGrade = SeatGrade.GradeB
+                        seatGrade = SeatGrade.GradeB,
                     ),
                     Seat(
                         rowNumber = RowNumber("B"),
                         columnNumber = ColumnNumber(1),
-                        seatGrade = SeatGrade.GradeS
+                        seatGrade = SeatGrade.GradeS,
                     ),
                 ),
         )
