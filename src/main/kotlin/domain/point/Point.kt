@@ -4,7 +4,7 @@ import domain.money.Money
 
 @JvmInline
 value class Point(
-    private val amount: Int,
+    val amount: Int,
 ) {
     init {
         require(amount >= 0) { "포인트는 0보다 작을 수 없습니다. (입력값: $amount)" }
@@ -18,5 +18,5 @@ value class Point(
         return Point(this.amount - amount)
     }
 
-    fun exchangeToMoney(): Money = Money(amount)
+    fun isBiggerThan(price: Int): Boolean = amount > price
 }
