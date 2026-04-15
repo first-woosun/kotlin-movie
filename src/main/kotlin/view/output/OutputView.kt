@@ -56,6 +56,10 @@ object OutputView {
         println("- ${reservation.getReservationSummary()}")
     }
 
+    fun printError(error: String) {
+        println(error)
+    }
+
     object Label {
         const val SCREENING_LIST_LABEL = "해당 날짜의 상영 목록"
         const val ADD_RESERVATION_LABEL = "장바구니에 추가됨"
