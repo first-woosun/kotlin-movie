@@ -21,10 +21,4 @@ class ScreenTime(
     fun isSameDate(date: Int): Boolean = screeningDate.dayOfMonth == date
 
     fun startTimeToString() = startTime.toString()
-
-    fun screeningDateToString() = screeningDate.toString()
-
-    fun getStartTime(): LocalTime = startTime
-
-    fun getScreeningDate(): LocalDate = screeningDate
 }

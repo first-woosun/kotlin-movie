@@ -16,8 +16,8 @@ class Reservations {
     }
 
     fun checkDuplicate(screenTime: ScreenTime): Boolean {
-        val startTime = screenTime.getStartTime()
-        val screeningDate = screenTime.getScreeningDate()
+        val startTime = screenTime.startTime
+        val screeningDate = screenTime.screeningDate
 
         return _reservations.any {
             it.isDuplicatedDate(screeningDate) && it.isDuplicatedTime(startTime)
