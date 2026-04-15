@@ -4,9 +4,9 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class ScreenTime(
-    private val startTime: LocalTime,
-    private val endTime: LocalTime,
-    private val screeningDate: LocalDate,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
+    val screeningDate: LocalDate,
 ) {
     fun isContain(time: LocalTime): Boolean = time in startTime..endTime
 
@@ -18,7 +18,7 @@ class ScreenTime(
 
     fun isScreeningAt(date: LocalDate): Boolean = screeningDate == date
 
-    fun screeningDayOfMonth(): Int = screeningDate.dayOfMonth
+    fun isSameDate(date: Int): Boolean = screeningDate.dayOfMonth == date
 
     fun startTimeToString() = startTime.toString()
 
