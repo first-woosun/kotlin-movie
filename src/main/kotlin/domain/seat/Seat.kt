@@ -5,15 +5,13 @@ import domain.seat.items.ColumnNumber
 import domain.seat.items.RowNumber
 import domain.seat.items.SeatGrade
 
-class Seat(
+data class Seat(
     private val rowNumber: RowNumber,
     private val columnNumber: ColumnNumber,
     private val seatGrade: SeatGrade,
 ) {
-    fun isExist(number: String): Boolean {
-        val row = number.substring(0, 1)
-        val col = number.substring(1).toInt()
-        return columnNumber.isSame(col) && rowNumber.isSame(row)
+    fun isExist(findingSeat: Seat): Boolean {
+        return this == findingSeat
     }
 
     fun getPrice(): Money = seatGrade.price
