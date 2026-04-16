@@ -24,15 +24,11 @@ object InputView {
         return value
     }
 
-    fun readDate(): List<Int> {
+    fun readDate(): String {
         println(LABEL.INPUT_DATE_LABEL)
         val value = inputTrim() ?: ""
         require(value.isNotBlank()) { LABEL.BLANK_ERROR }
-        val inputDate = value.split("-")
-        require(inputDate.size == 3) { LABEL.INVALID_DATE_FORMAT_ERROR }
-        return inputDate.map {
-            it.toIntOrNull() ?: throw IllegalArgumentException(LABEL.INVALID_TYPE_ERROR)
-        }
+        return value
     }
 
     fun readScreeningNumber(movieCount: Int): Int {
