@@ -7,7 +7,6 @@ import domain.movie.itmes.Title
 import domain.seat.Seat
 import domain.seat.items.ColumnNumber
 import domain.seat.items.RowNumber
-import domain.seat.items.SeatGrade
 import domain.timetable.items.ScreenTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,38 +14,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class ReservationTest {
-    val reservation =
-        Reservation(
-            movie =
-                Movie(
-                    title = Title("신바드의 모험"),
-                    runningTime = RunningTime(120),
-                    screeningPeriod =
-                        ScreeningPeriod(
-                            startDate = LocalDate.of(2026, 4, 1),
-                            endDate = LocalDate.of(2026, 4, 30),
-                        ),
-                ),
-            screenTime =
-                ScreenTime(
-                    startTime = LocalTime.of(11, 0),
-                    endTime = LocalTime.of(13, 0),
-                    screeningDate = LocalDate.of(2026, 4, 10),
-                ),
-            seats =
-                listOf<Seat>(
-                    Seat(
-                        rowNumber = RowNumber("A"),
-                        columnNumber = ColumnNumber(1),
-                        seatGrade = SeatGrade.GradeB,
-                    ),
-                    Seat(
-                        rowNumber = RowNumber("B"),
-                        columnNumber = ColumnNumber(1),
-                        seatGrade = SeatGrade.GradeS,
-                    ),
-                ),
-        )
+    private val reservation = createReservation()
 
     @Test
     fun `입력된 상영 일자가 screenTime의 screeningDate과 같다면 true를 반환받는다`() {
@@ -75,4 +43,28 @@ class ReservationTest {
 
         assertThat(result).isFalse()
     }
+
+    private fun createReservation() = Reservation(
+        movie = createMovie(),
+        screenTime = createScreenTime(),
+        seats = listOf(
+            Seat.create(RowNumber("A"), ColumnNumber(1)),
+            Seat.create(RowNumber("B"), ColumnNumber(1))
+        )
+    )
+
+    private fun createMovie() = Movie(
+        title = Title("신바드의 모험"),
+        runningTime = RunningTime(120),
+        screeningPeriod = ScreeningPeriod(
+            startDate = LocalDate.of(2026, 4, 1),
+            endDate = LocalDate.of(2026, 4, 30)
+        )
+    )
+
+    private fun createScreenTime() = ScreenTime(
+        startTime = LocalTime.of(11, 0),
+        endTime = LocalTime.of(13, 0),
+        screeningDate = LocalDate.of(2026, 4, 10)
+    )
 }
