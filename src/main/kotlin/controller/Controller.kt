@@ -19,6 +19,8 @@ import domain.timetable.MockTimeTable
 import domain.timetable.TimeTable
 import domain.timetable.items.Screen
 import domain.timetable.items.ScreeningSchedule
+import parser.DateParser
+import parser.SeatParser
 import view.input.InputView
 import view.output.OutputView
 import java.time.LocalDate
@@ -38,8 +40,7 @@ class Controller(
         if (!startReserve()) return
 
         do {
-            val reservation = makeReserve(reservations)
-            reservations.addReservation(reservation)
+            makeReserve(reservations)
         } while (continueReserve())
 
         payProcessor(reservations)
@@ -54,25 +55,29 @@ class Controller(
         }
     }
 
-    fun makeReserve(reservations: Reservations): Reservation {
+    fun makeReserve(reservations: Reservations) {
         val titleSearchResult = searchMovieWithTitle()
         val dateSearchResult = searchMovieWithDate(titleSearchResult)
         val selectedSchedule = selectMovieSchedule(dateSearchResult, reservations)
         val selectedSeats = selectSeats(selectedSchedule)
-        val reservation =
-            Reservation(
-                movie = selectedSchedule.getMovie(),
-                screenTime = selectedSchedule.getScreenTime(),
-                seats = selectedSeats,
-            )
-
-        return reservation
+        val reservation = Reservation(
+            movie = selectedSchedule.getMovie(),
+            screenTime = selectedSchedule.getScreenTime(),
+            seats = selectedSeats,
+        )
+        reservations.addReservation(reservation)
+        outputView.printAddReservation(reservation)
     }
 
     fun searchMovieWithTitle(): TimeTable {
         try {
             val title = Title(inputView.readMovieTitle())
-            return timeTable.getMovieSchedulesWithTitle(title)
+            val result = timeTable.getMovieSchedulesWithTitle(title)
+            if (result.isEmpty()) {
+                outputView.printError("해당 영화는 상영하고 있지 않습니다.")
+                return searchMovieWithTitle()
+            }
+            return result
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message!!)
             return searchMovieWithTitle()
@@ -81,9 +86,14 @@ class Controller(
 
     fun searchMovieWithDate(timeTable: TimeTable): TimeTable {
         try {
-            val date = inputView.readDate()
-            val localDate = LocalDate.of(date[0], date[1], date[2])
-            return timeTable.getMovieSchedulesWithDate(localDate)
+            val value = inputView.readDate()
+            val date = DateParser.parse(value)
+            val result = timeTable.getMovieSchedulesWithDate(date)
+            if(result.isEmpty()) {
+                outputView.printError("해당 일자의 상영 계획이 없습니다.")
+                return searchMovieWithDate(timeTable)
+            }
+            return result
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message!!)
             return searchMovieWithDate(timeTable)
@@ -114,31 +124,12 @@ class Controller(
         outputView.printSeatMap(Screen.seatMap)
         try {
             val seatNumbers = inputView.readSeatNumber()
-            seatNumbers.forEach {
-                if (screeningSchedule.isReservedSeat(it)) {
-                    outputView.printError("해당 좌석은 이미 예매되어 있습니다.")
-                    return selectSeats(screeningSchedule)
-                }
+            val seats = SeatParser.parse(seatNumbers)
+            if (screeningSchedule.isReservedSeat(seats)) {
+                outputView.printError("이미 예매된 좌석입니다.")
+                return selectSeats(screeningSchedule)
             }
-            val seats = mutableListOf<Seat>()
-            seatNumbers.forEach {
-                val rowNumber = RowNumber(it.substring(0, 1))
-                val columnNumber = ColumnNumber(it.substring(2).toInt())
-                val seatGrade =
-                    when (rowNumber.rowNumber) {
-                        in setOf("A", "B") -> SeatGrade.GradeB
-                        in setOf("C", "D") -> SeatGrade.GradeS
-                        else -> SeatGrade.GradeA
-                    }
-                seats.add(
-                    Seat(
-                        rowNumber = rowNumber,
-                        columnNumber = columnNumber,
-                        seatGrade = seatGrade,
-                    ),
-                )
-            }
-            return seats.toList()
+            return seats
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message!!)
             return selectSeats(screeningSchedule)
