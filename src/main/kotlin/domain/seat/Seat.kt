@@ -19,4 +19,14 @@ class Seat(
     fun getPrice(): Money = seatGrade.price
 
     fun getSeatNumber(): String = rowNumber.rowNumber + columnNumber.columnNumber
+
+    companion object {
+        fun create(rowNumber: RowNumber, columnNumber: ColumnNumber): Seat {
+            return Seat(
+                rowNumber = rowNumber,
+                columnNumber = columnNumber,
+                seatGrade = SeatGrade.from(rowNumber)
+            )
+        }
+    }
 }

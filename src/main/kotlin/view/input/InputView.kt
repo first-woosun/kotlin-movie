@@ -43,16 +43,12 @@ object InputView {
         return value
     }
 
-    fun readSeatNumber(): List<String> {
+    fun readSeatNumber(): String {
         println(LABEL.INPUT_SEAT_LABEL)
         val value = inputTrim() ?: ""
         require(value.isNotBlank()) { LABEL.BLANK_ERROR }
-        val numbers = value.split(",").map { it.trim() }
-        numbers.forEach {
-            require(it.matches(Regex("^[A-E][1-4]$"))) { LABEL.INVALID_SEAT_NUMBER_FORMAT_ERROR }
-        }
 
-        return numbers
+        return value
     }
 
     fun readContinue(): Boolean {
