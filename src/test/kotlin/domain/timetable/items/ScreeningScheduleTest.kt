@@ -65,6 +65,7 @@ class ScreeningScheduleTest {
 
     private fun createSchedule() =
         ScreeningSchedule(
+            id = 1,
             Movie(
                 title = Title("신바드의 모험"),
                 runningTime = RunningTime(120),

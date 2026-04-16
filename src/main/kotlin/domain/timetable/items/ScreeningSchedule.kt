@@ -6,6 +6,7 @@ import domain.seat.Seat
 import java.time.LocalDate
 
 class ScreeningSchedule(
+    private val id: Int?,
     private val movie: Movie,
     private val screenTime: ScreenTime,
 ) {
