@@ -8,7 +8,6 @@ import domain.timetable.items.ScreenTime
 import domain.timetable.items.ScreeningSchedule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 import java.time.LocalTime
 

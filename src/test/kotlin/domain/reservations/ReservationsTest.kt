@@ -4,7 +4,6 @@ import domain.movie.Movie
 import domain.movie.itmes.RunningTime
 import domain.movie.itmes.ScreeningPeriod
 import domain.movie.itmes.Title
-import domain.reservations.items.Reservation
 import domain.seat.Seat
 import domain.seat.items.ColumnNumber
 import domain.seat.items.RowNumber
@@ -62,39 +61,42 @@ class ReservationsTest {
         @BeforeAll
         @JvmStatic
         fun setUpReservation() {
-            val movie = Movie(
-                title = Title("신바드의 모험"),
-                runningTime = RunningTime(120),
-                screeningPeriod =
-                    ScreeningPeriod(
-                        startDate = LocalDate.of(2026, 4, 1),
-                        endDate = LocalDate.of(2026, 4, 30),
+            val movie =
+                Movie(
+                    title = Title("신바드의 모험"),
+                    runningTime = RunningTime(120),
+                    screeningPeriod =
+                        ScreeningPeriod(
+                            startDate = LocalDate.of(2026, 4, 1),
+                            endDate = LocalDate.of(2026, 4, 30),
+                        ),
+                )
+
+            val screenTime =
+                ScreenTime(
+                    startTime = LocalTime.of(11, 0),
+                    endTime = LocalTime.of(13, 0),
+                    screeningDate = LocalDate.of(2026, 4, 10),
+                )
+
+            val seats =
+                listOf<Seat>(
+                    Seat(
+                        rowNumber = RowNumber("A"),
+                        columnNumber = ColumnNumber(1),
+                        seatGrade = SeatGrade.GradeB,
                     ),
-            )
-
-            val screenTime = ScreenTime(
-                startTime = LocalTime.of(11, 0),
-                endTime = LocalTime.of(13, 0),
-                screeningDate = LocalDate.of(2026, 4, 10),
-            )
-
-            val seats = listOf<Seat>(
-                Seat(
-                    rowNumber = RowNumber("A"),
-                    columnNumber = ColumnNumber(1),
-                    seatGrade = SeatGrade.GradeB,
-                ),
-                Seat(
-                    rowNumber = RowNumber("B"),
-                    columnNumber = ColumnNumber(1),
-                    seatGrade = SeatGrade.GradeS,
-                ),
-            )
+                    Seat(
+                        rowNumber = RowNumber("B"),
+                        columnNumber = ColumnNumber(1),
+                        seatGrade = SeatGrade.GradeS,
+                    ),
+                )
 
             reservations.addReservation(
                 movie = movie,
                 screenTime = screenTime,
-                seats = seats
+                seats = seats,
             )
         }
     }

@@ -3,7 +3,6 @@ package parser
 import domain.seat.Seat
 import domain.seat.items.ColumnNumber
 import domain.seat.items.RowNumber
-import domain.seat.items.SeatGrade
 import view.input.InputView.LABEL
 
 object SeatParser {
@@ -15,7 +14,7 @@ object SeatParser {
             val rowNumber = RowNumber(it[0].toString())
             val columnNumber = ColumnNumber(it[1].digitToInt())
             seats.add(
-                Seat.create(rowNumber, columnNumber)
+                Seat.create(rowNumber, columnNumber),
             )
         }
         return seats

@@ -16,9 +16,10 @@ class SeatTest {
                 seatGrade = SeatGrade.GradeB,
             )
 
-        val result = seat.isExist(
-            Seat.create(RowNumber("A"), ColumnNumber(1))
-        )
+        val result =
+            seat.isExist(
+                Seat.create(RowNumber("A"), ColumnNumber(1)),
+            )
 
         assertThat(result).isTrue()
     }
@@ -31,9 +32,10 @@ class SeatTest {
                 columnNumber = ColumnNumber(1),
                 seatGrade = SeatGrade.GradeB,
             )
-        val result = seat.isExist(
-            Seat.create(RowNumber("A"), ColumnNumber(2))
-        )
+        val result =
+            seat.isExist(
+                Seat.create(RowNumber("A"), ColumnNumber(2)),
+            )
 
         assertThat(result).isFalse()
     }

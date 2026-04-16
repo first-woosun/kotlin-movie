@@ -16,13 +16,15 @@ class Reservations {
     fun addReservation(
         movie: Movie,
         screenTime: ScreenTime,
-        seats: List<Seat>
+        seats: List<Seat>,
     ) {
-        _reservations.add(Reservation(
-            movie = movie,
-            screenTime = screenTime,
-            seats = seats
-        ))
+        _reservations.add(
+            Reservation(
+                movie = movie,
+                screenTime = screenTime,
+                seats = seats,
+            ),
+        )
     }
 
     fun checkDuplicate(screenTime: ScreenTime): Boolean {

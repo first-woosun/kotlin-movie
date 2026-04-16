@@ -10,21 +10,21 @@ data class Seat(
     private val columnNumber: ColumnNumber,
     private val seatGrade: SeatGrade,
 ) {
-    fun isExist(findingSeat: Seat): Boolean {
-        return this == findingSeat
-    }
+    fun isExist(findingSeat: Seat): Boolean = this == findingSeat
 
     fun getPrice(): Money = seatGrade.price
 
     fun getSeatNumber(): String = rowNumber.rowNumber + columnNumber.columnNumber
 
     companion object {
-        fun create(rowNumber: RowNumber, columnNumber: ColumnNumber): Seat {
-            return Seat(
+        fun create(
+            rowNumber: RowNumber,
+            columnNumber: ColumnNumber,
+        ): Seat =
+            Seat(
                 rowNumber = rowNumber,
                 columnNumber = columnNumber,
-                seatGrade = SeatGrade.from(rowNumber)
+                seatGrade = SeatGrade.from(rowNumber),
             )
-        }
     }
 }

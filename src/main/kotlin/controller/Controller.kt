@@ -12,9 +12,6 @@ import domain.point.Point
 import domain.reservations.Reservations
 import domain.reservations.items.Reservation
 import domain.seat.Seat
-import domain.seat.items.ColumnNumber
-import domain.seat.items.RowNumber
-import domain.seat.items.SeatGrade
 import domain.timetable.MockTimeTable
 import domain.timetable.TimeTable
 import domain.timetable.items.Screen
@@ -23,7 +20,6 @@ import parser.DateParser
 import parser.SeatParser
 import view.input.InputView
 import view.output.OutputView
-import java.time.LocalDate
 
 class Controller(
     val inputView: InputView,
@@ -70,7 +66,7 @@ class Controller(
                 movie = selectedSchedule.getMovie(),
                 screenTime = selectedSchedule.getScreenTime(),
                 seats = selectedSeats,
-            )
+            ),
         )
     }
 
@@ -94,7 +90,7 @@ class Controller(
             val value = inputView.readDate()
             val date = DateParser.parse(value)
             val result = timeTable.getMovieSchedulesWithDate(date)
-            if(result.isEmpty()) {
+            if (result.isEmpty()) {
                 outputView.printError("해당 일자의 상영 계획이 없습니다.")
                 return searchMovieWithDate(timeTable)
             }
@@ -197,7 +193,7 @@ class Controller(
             return PayMethod.toPolicy(
                 payMethod = payMethod,
                 cardDiscountPolicy = cardDiscountPolicy,
-                cashDiscountPolicy = cashDiscountPolicy
+                cashDiscountPolicy = cashDiscountPolicy,
             )
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message!!)
