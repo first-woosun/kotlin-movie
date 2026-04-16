@@ -60,13 +60,18 @@ class Controller(
         val dateSearchResult = searchMovieWithDate(titleSearchResult)
         val selectedSchedule = selectMovieSchedule(dateSearchResult, reservations)
         val selectedSeats = selectSeats(selectedSchedule)
-        val reservation = Reservation(
+        reservations.addReservation(
             movie = selectedSchedule.getMovie(),
             screenTime = selectedSchedule.getScreenTime(),
             seats = selectedSeats,
         )
-        reservations.addReservation(reservation)
-        outputView.printAddReservation(reservation)
+        outputView.printAddReservation(
+            Reservation(
+                movie = selectedSchedule.getMovie(),
+                screenTime = selectedSchedule.getScreenTime(),
+                seats = selectedSeats,
+            )
+        )
     }
 
     fun searchMovieWithTitle(): TimeTable {
