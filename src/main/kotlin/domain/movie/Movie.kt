@@ -10,7 +10,7 @@ class Movie(
     private val runningTime: RunningTime,
     private val screeningPeriod: ScreeningPeriod,
 ) {
-    fun isExist(title: Title): Boolean = this.title == title
+    fun isSameTitle(title: Title): Boolean = this.title == title
 
     fun isScreening(date: LocalDate): Boolean = this.screeningPeriod.isContain(date)
 

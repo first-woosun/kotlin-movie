@@ -21,7 +21,7 @@ class MovieTest {
                     ),
             )
 
-        val result = movie.isExist(Title("신바드의 모험"))
+        val result = movie.isSameTitle(Title("신바드의 모험"))
 
         assertThat(result).isTrue()
     }
@@ -39,7 +39,7 @@ class MovieTest {
                     ),
             )
 
-        val result = movie.isExist(Title("신밧드의 모험"))
+        val result = movie.isSameTitle(Title("신밧드의 모험"))
 
         assertThat(result).isFalse()
     }
