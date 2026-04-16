@@ -9,13 +9,13 @@ class TimeTable(
 ) {
     fun getMovieSchedulesWithTitle(title: Title): TimeTable {
         val findedSchedules = schedules.filter { it.isScreeningMovieTitle(title) }
-        if (findedSchedules.isEmpty()) throw IllegalArgumentException("해당 영화는 사영하고 있지 않습니다.")
+        if (findedSchedules.isEmpty()) return TimeTable(emptyList())
         return TimeTable(findedSchedules)
     }
 
     fun getMovieSchedulesWithDate(date: LocalDate): TimeTable {
         val findedSchedules = schedules.filter { it.isScreeningDate(date) }
-        if (findedSchedules.isEmpty()) throw IllegalArgumentException("해당 일자는 상영 계획이 없습니다.")
+        if (findedSchedules.isEmpty()) return TimeTable(emptyList())
         return TimeTable(findedSchedules)
     }
 
@@ -24,4 +24,6 @@ class TimeTable(
     fun getSchedules(): List<ScreeningSchedule> = schedules
 
     fun getScheduleWithIndex(index: Int): ScreeningSchedule = schedules[index]
+
+    fun isEmpty(): Boolean = schedules.isEmpty()
 }
