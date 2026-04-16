@@ -2,5 +2,18 @@ package domain.discountpolicy
 
 enum class PayMethod {
     CARD,
-    CASH,
+    CASH;
+
+    companion object {
+        fun toPolicy(
+            payMethod: PayMethod,
+            cardDiscountPolicy: CardDiscountPolicy,
+            cashDiscountPolicy: CashDiscountPolicy
+        ): PayMethodDiscountPolicy {
+            return when (payMethod) {
+                CARD -> cardDiscountPolicy
+                CASH -> cashDiscountPolicy
+            }
+        }
+    }
 }

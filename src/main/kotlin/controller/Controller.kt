@@ -189,10 +189,11 @@ class Controller(
     fun getUsePayMethod(): PayMethodDiscountPolicy {
         try {
             val payMethod = inputView.readPayMethod()
-            return when (payMethod) {
-                PayMethod.CARD -> cardDiscountPolicy
-                PayMethod.CASH -> cashDiscountPolicy
-            }
+            return PayMethod.toPolicy(
+                payMethod = payMethod,
+                cardDiscountPolicy = cardDiscountPolicy,
+                cashDiscountPolicy = cashDiscountPolicy
+            )
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message!!)
             return getUsePayMethod()
