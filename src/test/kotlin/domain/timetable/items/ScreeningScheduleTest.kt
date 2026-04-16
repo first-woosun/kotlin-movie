@@ -145,11 +145,11 @@ class ScreeningScheduleTest {
             Seat(
                 rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(1),
-                seatGrade = SeatGrade.GradeA,
+                seatGrade = SeatGrade.GradeB,
             )
         reservationSchedule.reserveSeat(reserveSeat)
 
-        val result = reservationSchedule.isReservedSeat("A1")
+        val result = reservationSchedule.isReservedSeat(listOf(Seat.create(RowNumber("A"), ColumnNumber(1))))
 
         assertThat(result).isTrue()
     }
@@ -201,11 +201,11 @@ class ScreeningScheduleTest {
             Seat(
                 rowNumber = RowNumber("A"),
                 columnNumber = ColumnNumber(1),
-                seatGrade = SeatGrade.GradeA,
+                seatGrade = SeatGrade.GradeB,
             )
         reservationSchedule.reserveSeat(reserveSeat)
 
-        val result = reservationSchedule.isReservedSeat("B1")
+        val result = reservationSchedule.isReservedSeat(listOf(Seat.create(RowNumber("B"), ColumnNumber(1))))
 
         assertThat(result).isFalse()
     }

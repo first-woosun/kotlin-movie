@@ -54,8 +54,9 @@ class TimeTableTest {
     }
 
     @Test
-    fun `입력받은 영화 제목이 screening schedule의 목록 중 일치하는 스케쥴이 없다면 예외를 발생시킨다`() {
-        assertThrows<IllegalArgumentException> { timeTable.getMovieSchedulesWithTitle(Title("심바드의 모험")) }
+    fun `입력받은 영화 제목이 screening schedule의 목록 중 일치하는 스케쥴이 없다면 빈 객체를 반환한다`() {
+        val result = timeTable.getMovieSchedulesWithTitle(Title("심바드의 모험"))
+        assertThat(result.isEmpty()).isTrue()
     }
 
     @Test
@@ -65,8 +66,9 @@ class TimeTableTest {
     }
 
     @Test
-    fun `입력받은 상영 일자가 screening schedule의 목록 중 일치하는 스케쥴이 없다면 예외를 발생시킨다`() {
-        assertThrows<IllegalArgumentException> { timeTable.getMovieSchedulesWithDate(LocalDate.of(2020, 2, 2)) }
+    fun `입력받은 상영 일자가 screening schedule의 목록 중 일치하는 스케쥴이 없다면 빈 객체를 반환한다`() {
+        val result = timeTable.getMovieSchedulesWithDate(LocalDate.of(2026, 4, 10))
+        assertThat(result.isEmpty()).isTrue()
     }
 
     private fun createSchedule(

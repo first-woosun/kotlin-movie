@@ -16,7 +16,9 @@ class SeatTest {
                 seatGrade = SeatGrade.GradeB,
             )
 
-        val result = seat.isExist("A1")
+        val result = seat.isExist(
+            Seat.create(RowNumber("A"), ColumnNumber(1))
+        )
 
         assertThat(result).isTrue()
     }
@@ -29,7 +31,9 @@ class SeatTest {
                 columnNumber = ColumnNumber(1),
                 seatGrade = SeatGrade.GradeB,
             )
-        val result = seat.isExist("B2")
+        val result = seat.isExist(
+            Seat.create(RowNumber("A"), ColumnNumber(2))
+        )
 
         assertThat(result).isFalse()
     }
@@ -42,7 +46,9 @@ class SeatTest {
                 columnNumber = ColumnNumber(1),
                 seatGrade = SeatGrade.GradeS,
             )
-        assertThat(seat.getPrice().getAmount()).isEqualTo(18000)
+
+        val price = seat.getPrice()
+        assertThat(price.amount).isEqualTo(18000)
     }
 
     @Test
@@ -53,7 +59,9 @@ class SeatTest {
                 columnNumber = ColumnNumber(1),
                 seatGrade = SeatGrade.GradeA,
             )
-        assertThat(seat.getPrice().getAmount()).isEqualTo(15000)
+
+        val price = seat.getPrice()
+        assertThat(price.amount).isEqualTo(15000)
     }
 
     @Test
@@ -64,6 +72,8 @@ class SeatTest {
                 columnNumber = ColumnNumber(1),
                 seatGrade = SeatGrade.GradeB,
             )
-        assertThat(seat.getPrice().getAmount()).isEqualTo(13000)
+
+        val price = seat.getPrice()
+        assertThat(price.amount).isEqualTo(13000)
     }
 }
