@@ -15,7 +15,9 @@ class ScreeningSchedule(
 
     fun isScreeningDate(date: LocalDate) = screenTime.isScreeningAt(date)
 
-    fun isReservedSeat(seatNumber: String) = reservedSeat.any { it.isExist(seatNumber) }
+    fun isReservedSeat(seats: List<Seat>): Boolean {
+        return seats.any { it in reservedSeat }
+    }
 
     fun reserveSeat(seat: Seat) = reservedSeat.add(seat)
 

@@ -5,7 +5,7 @@ import domain.seat.Seat
 class Screen(
     private val seats: List<Seat>,
 ) {
-    fun findSeat(number: String): Boolean = seats.any { it.isExist(number) }
+    fun findSeat(seat: Seat): Boolean = seats.any { it.isExist(seat) }
 
     companion object {
         val seatMap =
