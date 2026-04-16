@@ -10,8 +10,6 @@ value class Money(
         require(amount >= 0) { "가격은 0보다 작을 수 없습니다. (입력값: $amount)" }
     }
 
-    fun getAmount() = amount
-
     fun applyPoint(pointAmount: Int): Money = Money(amount - pointAmount)
 
     fun applyPayMethod(payMethodDiscountPolicy: PayMethodDiscountPolicy): Money = payMethodDiscountPolicy.applyDiscount(this)

@@ -153,13 +153,13 @@ class Controller(
         val pointAppliedPrice = usePoint(totalPrice)
         val finalPrice = applyPayMethodDiscount(pointAppliedPrice)
 
-        outputView.printFinalPrice(finalPrice.getAmount())
+        outputView.printFinalPrice(finalPrice.amount)
 
         if (!inputView.readPayAgreement()) return
 
         outputView.printReceipt(
             reservations.reservations,
-            finalPrice.getAmount(),
+            finalPrice.amount,
         )
     }
 
