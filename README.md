@@ -13,11 +13,12 @@
 ## 기능 구현 목록
 1. [x] Spring Boot 의존성 추가
 
-2. [ ] 영화 상영 정보 조회 API 구현
-    - [ ] GET/api/movies 엔드포인트 구성
+2. [x] 영화 상영 정보 조회 API 구현
+    - [x] GET/api/movies 엔드포인트 구성
     - [x] 전체 영화 목록 조회 구현
     - [x] 영화별 상영 일정 조회 구현
     - [x] 도메인 객체 JSON 파싱 DTO 구현
+    - [x] 상영 목록 조회 후 200 ok 응답 반환
 
 3. [ ] 예매 API 구현
    - [ ] POST/api/reservations 엔드포인트 구현
