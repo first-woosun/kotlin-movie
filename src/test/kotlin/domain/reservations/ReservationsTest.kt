@@ -94,6 +94,7 @@ class ReservationsTest {
                 )
 
             reservations.addReservation(
+                scheduleId = 1,
                 movie = movie,
                 screenTime = screenTime,
                 seats = seats,

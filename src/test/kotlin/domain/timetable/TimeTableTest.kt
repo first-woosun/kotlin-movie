@@ -65,7 +65,7 @@ class TimeTableTest {
         startTime: LocalTime,
         screeningDate: LocalDate
     ) = ScreeningSchedule(
-        Movie(
+        movie = Movie(
             title = Title(title),
             runningTime = RunningTime(120),
             screeningPeriod = ScreeningPeriod(
