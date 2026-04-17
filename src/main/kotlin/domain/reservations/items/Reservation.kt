@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class Reservation(
+    val id: Int? = null,
     private val movie: Movie,
     private val screenTime: ScreenTime,
     private val seats: List<Seat>,
