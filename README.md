@@ -11,7 +11,7 @@
 - HTTP API와 관련된 테스트를 작성한다.
 
 ## 기능 구현 목록
-1. [ ] Spring Boot 의존성 추가
+1. [x] Spring Boot 의존성 추가
 
 2. [ ] 영화 상영 정보 조회 API 구현
     - [ ] GET/api/movies 엔드포인트 구성

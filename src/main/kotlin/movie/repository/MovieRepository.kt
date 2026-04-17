@@ -5,8 +5,10 @@ import movie.domain.movie.Movie
 import movie.domain.movie.itmes.RunningTime
 import movie.domain.movie.itmes.ScreeningPeriod
 import movie.domain.movie.itmes.Title
+import org.springframework.stereotype.Repository
 import java.sql.ResultSet
 
+@Repository
 class MovieRepository(
     private val connector: JdbcConnectorFactory,
 ) {

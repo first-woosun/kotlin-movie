@@ -11,11 +11,13 @@ import movie.domain.movie.itmes.RunningTime
 import movie.domain.movie.itmes.ScreeningPeriod
 import movie.domain.movie.itmes.Title
 import movie.domain.timetable.items.ScreenTime
+import org.springframework.stereotype.Repository
 import java.sql.Connection
 import java.sql.Date
 import java.sql.Statement
 import java.time.LocalDate
 
+@Repository
 class ReservationRepository(
     private val connector: JdbcConnectorFactory,
 ) {

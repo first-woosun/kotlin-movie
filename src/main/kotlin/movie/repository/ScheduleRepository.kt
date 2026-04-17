@@ -8,10 +8,12 @@ import movie.domain.movie.itmes.Title
 import movie.domain.timetable.TimeTable
 import movie.domain.timetable.items.ScreenTime
 import movie.domain.timetable.items.ScreeningSchedule
+import org.springframework.stereotype.Repository
 import java.sql.Date
 import java.sql.ResultSet
 import java.time.LocalDate
 
+@Repository
 class ScheduleRepository(
     private val connector: JdbcConnectorFactory,
 ) {
@@ -71,6 +73,21 @@ class ScheduleRepository(
             }
         }
         return TimeTable(schedules)
+    }
+
+    fun findById(id: Int): ScreeningSchedule? {
+        val sql =
+            """
+            SELECT * 
+            FROM SCREENING_SCHEDULE s JOIN MOVIE m ON s.movie_id = m.id
+            WHERE s.id = ?
+            """.trimIndent()
+        connector.getConnection().use {
+            val statement = it.prepareStatement(sql)
+            statement.setInt(1, id)
+            val resultSet = statement.executeQuery()
+            return if (resultSet.next()) mapToScreeningSchedule(resultSet) else null
+        }
     }
 
     private fun mapToScreeningSchedule(resultSet: ResultSet): ScreeningSchedule {

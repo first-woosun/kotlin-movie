@@ -1,10 +1,14 @@
 package movie.db
 
+import jakarta.annotation.PostConstruct
+import org.springframework.stereotype.Component
 import java.sql.Connection
 
+@Component
 class DatabaseInitializer(
     private val connector: JdbcConnectorFactory,
 ) {
+    @PostConstruct
     fun initializeTable() {
         connector.getConnection().use {
             createTables(it)
