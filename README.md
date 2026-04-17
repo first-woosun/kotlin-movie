@@ -17,7 +17,7 @@
     - [ ] GET/api/movies 엔드포인트 구성
     - [x] 전체 영화 목록 조회 구현
     - [x] 영화별 상영 일정 조회 구현
-    - [ ] 도메인 객체 JSON 파싱 DTO 구현
+    - [x] 도메인 객체 JSON 파싱 DTO 구현
 
 3. [ ] 예매 API 구현
    - [ ] POST/api/reservations 엔드포인트 구현
