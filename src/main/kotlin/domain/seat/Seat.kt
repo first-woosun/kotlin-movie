@@ -6,8 +6,8 @@ import domain.seat.items.RowNumber
 import domain.seat.items.SeatGrade
 
 data class Seat(
-    private val rowNumber: RowNumber,
-    private val columnNumber: ColumnNumber,
+    val rowNumber: RowNumber,
+    val columnNumber: ColumnNumber,
     private val seatGrade: SeatGrade,
 ) {
     fun isExist(findingSeat: Seat): Boolean = this == findingSeat

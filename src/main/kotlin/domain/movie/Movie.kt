@@ -6,7 +6,7 @@ import domain.movie.itmes.Title
 import java.time.LocalDate
 
 class Movie(
-    private val id: Int? = null,
+    val id: Int? = null,
     private val title: Title,
     private val runningTime: RunningTime,
     private val screeningPeriod: ScreeningPeriod,

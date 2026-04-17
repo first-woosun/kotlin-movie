@@ -1,34 +1,33 @@
 package controller
 
-import domain.discountpolicy.CardDiscountPolicy
-import domain.discountpolicy.CashDiscountPolicy
-import domain.discountpolicy.MovieDayDiscountPolicy
-import domain.discountpolicy.PayMethod
-import domain.discountpolicy.PayMethodDiscountPolicy
-import domain.discountpolicy.TimeDiscountPolicy
+import domain.discountpolicy.*
 import domain.money.Money
 import domain.movie.itmes.Title
 import domain.point.Point
 import domain.reservations.Reservations
 import domain.reservations.items.Reservation
 import domain.seat.Seat
-import domain.timetable.MockTimeTable
 import domain.timetable.TimeTable
 import domain.timetable.items.Screen
 import domain.timetable.items.ScreeningSchedule
 import parser.DateParser
 import parser.SeatParser
+import repository.MovieRepository
+import repository.ReservationRepository
+import repository.ScheduleRepository
 import view.input.InputView
 import view.output.OutputView
 
 class Controller(
-    val inputView: InputView,
-    val outputView: OutputView,
-    val timeDiscountPolicy: TimeDiscountPolicy,
-    val movieDayDiscountPolicy: MovieDayDiscountPolicy,
-    val cardDiscountPolicy: CardDiscountPolicy,
-    val cashDiscountPolicy: CashDiscountPolicy,
-    val timeTable: TimeTable = TimeTable(MockTimeTable.timeTable),
+    private val movieRepository: MovieRepository,
+    private val scheduleRepository: ScheduleRepository,
+    private val reservationRepository: ReservationRepository,
+    private val inputView: InputView = InputView,
+    private val outputView: OutputView = OutputView,
+    private val timeDiscountPolicy: TimeDiscountPolicy = TimeDiscountPolicy(Money(2000)),
+    private val movieDayDiscountPolicy: MovieDayDiscountPolicy = MovieDayDiscountPolicy(0.9),
+    private val cardDiscountPolicy: CardDiscountPolicy = CardDiscountPolicy(0.95),
+    private val cashDiscountPolicy: CashDiscountPolicy = CashDiscountPolicy(0.9),
 ) {
     fun run() {
         val reservations = Reservations()
@@ -42,7 +41,7 @@ class Controller(
         payProcessor(reservations)
     }
 
-    fun startReserve(): Boolean {
+    private fun startReserve(): Boolean {
         try {
             return inputView.readStartReserve()
         } catch (e: IllegalArgumentException) {
@@ -51,18 +50,22 @@ class Controller(
         }
     }
 
-    fun makeReserve(reservations: Reservations) {
+    private fun makeReserve(reservations: Reservations) {
         val titleSearchResult = searchMovieWithTitle()
         val dateSearchResult = searchMovieWithDate(titleSearchResult)
         val selectedSchedule = selectMovieSchedule(dateSearchResult, reservations)
         val selectedSeats = selectSeats(selectedSchedule)
+        
         reservations.addReservation(
+            scheduleId = selectedSchedule.id!!,
             movie = selectedSchedule.getMovie(),
             screenTime = selectedSchedule.getScreenTime(),
             seats = selectedSeats,
         )
+        
         outputView.printAddReservation(
             Reservation(
+                scheduleId = selectedSchedule.id,
                 movie = selectedSchedule.getMovie(),
                 screenTime = selectedSchedule.getScreenTime(),
                 seats = selectedSeats,
@@ -70,10 +73,10 @@ class Controller(
         )
     }
 
-    fun searchMovieWithTitle(): TimeTable {
+    private fun searchMovieWithTitle(): TimeTable {
         try {
             val title = Title(inputView.readMovieTitle())
-            val result = timeTable.getMovieSchedulesWithTitle(title)
+            val result = scheduleRepository.findAllByTitle(title)
             if (result.isEmpty()) {
                 outputView.printError("해당 영화는 상영하고 있지 않습니다.")
                 return searchMovieWithTitle()
@@ -85,7 +88,7 @@ class Controller(
         }
     }
 
-    fun searchMovieWithDate(timeTable: TimeTable): TimeTable {
+    private fun searchMovieWithDate(timeTable: TimeTable): TimeTable {
         try {
             val value = inputView.readDate()
             val date = DateParser.parse(value)
@@ -101,7 +104,7 @@ class Controller(
         }
     }
 
-    fun selectMovieSchedule(
+    private fun selectMovieSchedule(
         timeTable: TimeTable,
         reservations: Reservations,
     ): ScreeningSchedule {
@@ -121,12 +124,15 @@ class Controller(
         }
     }
 
-    fun selectSeats(screeningSchedule: ScreeningSchedule): List<Seat> {
+    private fun selectSeats(screeningSchedule: ScreeningSchedule): List<Seat> {
+        val reservedSeatsInDb = reservationRepository.findReservedSeatsByScheduleId(screeningSchedule.id!!)
+        
         outputView.printSeatMap(Screen.seatMap)
         try {
             val seatNumbers = inputView.readSeatNumber()
             val seats = SeatParser.parse(seatNumbers)
-            if (screeningSchedule.isReservedSeat(seats)) {
+            
+            if (screeningSchedule.isReservedSeat(seats) || seats.any { it in reservedSeatsInDb }) {
                 outputView.printError("이미 예매된 좌석입니다.")
                 return selectSeats(screeningSchedule)
             }
@@ -137,7 +143,7 @@ class Controller(
         }
     }
 
-    fun continueReserve(): Boolean {
+    private fun continueReserve(): Boolean {
         try {
             return inputView.readContinue()
         } catch (e: IllegalArgumentException) {
@@ -146,7 +152,7 @@ class Controller(
         }
     }
 
-    fun payProcessor(reservations: Reservations) {
+    private fun payProcessor(reservations: Reservations) {
         val reservationItems = reservations.reservations
         outputView.printFinalReservations(reservationItems)
 
@@ -158,13 +164,22 @@ class Controller(
 
         if (!inputView.readPayAgreement()) return
 
+        saveAllToDatabase(reservations)
+
         outputView.printReceipt(
             reservations.reservations,
             finalPrice.amount,
         )
     }
 
-    fun getUsePoint(): Point {
+    private fun saveAllToDatabase(reservations: Reservations) {
+        reservations.reservations.forEach { reservation ->
+            val totalPrice = reservation.price(timeDiscountPolicy, movieDayDiscountPolicy)
+            reservationRepository.save(reservation.scheduleId!!, reservation, totalPrice)
+        }
+    }
+
+    private fun getUsePoint(): Point {
         try {
             return Point(inputView.readUsePoint())
         } catch (e: IllegalArgumentException) {
@@ -173,7 +188,7 @@ class Controller(
         }
     }
 
-    fun usePoint(price: Money): Money {
+    private fun usePoint(price: Money): Money {
         try {
             val point = getUsePoint()
             if (point.isBiggerThan(price.amount)) {
@@ -187,7 +202,7 @@ class Controller(
         }
     }
 
-    fun getUsePayMethod(): PayMethodDiscountPolicy {
+    private fun getUsePayMethod(): PayMethodDiscountPolicy {
         try {
             val payMethod = inputView.readPayMethod()
             return PayMethod.toPolicy(
@@ -201,7 +216,7 @@ class Controller(
         }
     }
 
-    fun applyPayMethodDiscount(price: Money): Money {
+    private fun applyPayMethodDiscount(price: Money): Money {
         val payMethodDiscountPolicy = getUsePayMethod()
         return price.applyPayMethod(payMethodDiscountPolicy)
     }

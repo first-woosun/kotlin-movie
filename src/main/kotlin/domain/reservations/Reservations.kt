@@ -14,12 +14,14 @@ class Reservations {
     val reservations get() = _reservations.toList()
 
     fun addReservation(
+        scheduleId: Int,
         movie: Movie,
         screenTime: ScreenTime,
         seats: List<Seat>,
     ) {
         _reservations.add(
             Reservation(
+                scheduleId = scheduleId,
                 movie = movie,
                 screenTime = screenTime,
                 seats = seats,

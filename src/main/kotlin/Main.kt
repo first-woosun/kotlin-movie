@@ -1,32 +1,24 @@
 import controller.Controller
-import domain.discountpolicy.CardDiscountPolicy
-import domain.discountpolicy.CashDiscountPolicy
-import domain.discountpolicy.MovieDayDiscountPolicy
-import domain.discountpolicy.TimeDiscountPolicy
-import domain.money.Money
-import view.input.InputView
-import view.output.OutputView
+import db.DatabaseInitializer
+import db.JdbcConnectorFactory
+import repository.MovieRepository
+import repository.ReservationRepository
+import repository.ScheduleRepository
 
 fun main() {
-    val timeDiscountPolicy =
-        TimeDiscountPolicy(
-            discountAmount = Money(2000),
-        )
-    val movieDayDiscountPolicy =
-        MovieDayDiscountPolicy(
-            discountRate = 0.9,
-        )
+    val connector = JdbcConnectorFactory.createLocal()
 
-    val cardDiscountPolicy = CardDiscountPolicy(discountRate = 0.95)
+    val databaseInitializer = DatabaseInitializer(connector)
+    databaseInitializer.initializeTable()
 
-    val cashDiscountPolicy = CashDiscountPolicy(0.98)
+    val movieRepository = MovieRepository(connector)
+    val scheduleRepository = ScheduleRepository(connector)
+    val reservationRepository = ReservationRepository(connector)
 
-    Controller(
-        inputView = InputView,
-        outputView = OutputView,
-        cardDiscountPolicy = cardDiscountPolicy,
-        cashDiscountPolicy = cashDiscountPolicy,
-        timeDiscountPolicy = timeDiscountPolicy,
-        movieDayDiscountPolicy = movieDayDiscountPolicy,
-    ).run()
+    val controller = Controller(
+        movieRepository = movieRepository,
+        scheduleRepository = scheduleRepository,
+        reservationRepository = reservationRepository
+    )
+    controller.run()
 }

@@ -11,6 +11,7 @@ import java.time.LocalTime
 
 class Reservation(
     val id: Int? = null,
+    val scheduleId: Int? = null,
     private val movie: Movie,
     private val screenTime: ScreenTime,
     private val seats: List<Seat>,

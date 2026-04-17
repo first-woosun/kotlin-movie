@@ -67,10 +67,8 @@ class ReservationRepository(private val connector: JdbcConnectorFactory) {
 
         for (seat in seats) {
             statement.setInt(1, reservationId)
-            // Seat 클래스의 getSeatNumber() 등을 활용하거나 프로퍼티가 public인지 확인 필요
-            // 여기서는 Seat.kt 구조를 참고하여 수정 (rowNumber, columnNumber가 필요)
-            statement.setString(2, seat.getSeatNumber().take(1))
-            statement.setInt(3, seat.getSeatNumber().substring(1).toInt())
+            statement.setString(2, seat.rowNumber.rowNumber)
+            statement.setInt(3, seat.columnNumber.columnNumber)
             statement.executeUpdate()
         }
     }
@@ -106,7 +104,7 @@ class ReservationRepository(private val connector: JdbcConnectorFactory) {
                     rs.getTime("end_time").toLocalTime(),
                     rs.getDate("screening_date").toLocalDate()
                 )
-                reservations.add(Reservation(resId, movie, screenTime, seats))
+                reservations.add(Reservation(id = resId, movie = movie, screenTime = screenTime, seats = seats))
             }
         }
         return reservations
