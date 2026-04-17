@@ -1,7 +1,9 @@
 package domain.discountpolicy
 
-import domain.money.Money
-import domain.timetable.items.ScreenTime
+import movie.domain.money.Money
+import movie.domain.timetable.items.ScreenTime
+import movie.domain.discountpolicy.MovieDayDiscountPolicy
+import movie.domain.discountpolicy.TimeDiscountPolicy
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

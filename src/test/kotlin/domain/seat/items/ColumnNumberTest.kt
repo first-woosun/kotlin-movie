@@ -1,5 +1,6 @@
 package domain.seat.items
 
+import movie.domain.seat.items.ColumnNumber
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

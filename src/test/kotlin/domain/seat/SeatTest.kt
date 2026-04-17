@@ -1,8 +1,9 @@
 package domain.seat
 
-import domain.seat.items.ColumnNumber
-import domain.seat.items.RowNumber
-import domain.seat.items.SeatGrade
+import movie.domain.seat.items.ColumnNumber
+import movie.domain.seat.items.RowNumber
+import movie.domain.seat.items.SeatGrade
+import movie.domain.seat.Seat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -1,6 +1,6 @@
 package domain.movie.items
 
-import domain.movie.itmes.RunningTime
+import movie.domain.movie.itmes.RunningTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

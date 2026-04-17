@@ -1,6 +1,8 @@
 package domain.discountpolicy
 
-import domain.money.Money
+import movie.domain.money.Money
+import movie.domain.discountpolicy.CardDiscountPolicy
+import movie.domain.discountpolicy.CashDiscountPolicy
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

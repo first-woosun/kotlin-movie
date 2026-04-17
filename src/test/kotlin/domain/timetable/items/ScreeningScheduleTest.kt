@@ -1,12 +1,14 @@
 package domain.timetable.items
 
-import domain.movie.Movie
-import domain.movie.itmes.RunningTime
-import domain.movie.itmes.ScreeningPeriod
-import domain.movie.itmes.Title
-import domain.seat.Seat
-import domain.seat.items.ColumnNumber
-import domain.seat.items.RowNumber
+import movie.domain.movie.Movie
+import movie.domain.movie.itmes.RunningTime
+import movie.domain.movie.itmes.ScreeningPeriod
+import movie.domain.movie.itmes.Title
+import movie.domain.seat.Seat
+import movie.domain.seat.items.ColumnNumber
+import movie.domain.seat.items.RowNumber
+import movie.domain.timetable.items.ScreenTime
+import movie.domain.timetable.items.ScreeningSchedule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

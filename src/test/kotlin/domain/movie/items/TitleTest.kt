@@ -1,6 +1,6 @@
 package domain.movie.items
 
-import domain.movie.itmes.Title
+import movie.domain.movie.itmes.Title
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

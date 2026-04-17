@@ -1,5 +1,6 @@
 package domain.timetable.items
 
+import movie.domain.timetable.items.ScreenTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

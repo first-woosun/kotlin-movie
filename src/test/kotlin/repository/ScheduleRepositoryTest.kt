@@ -1,8 +1,9 @@
 package repository
 
-import db.DatabaseInitializer
-import db.JdbcConnectorFactory
-import domain.movie.itmes.Title
+import movie.db.DatabaseInitializer
+import movie.db.JdbcConnectorFactory
+import movie.domain.movie.itmes.Title
+import movie.repository.ScheduleRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

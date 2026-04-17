@@ -1,5 +1,6 @@
 package domain.money
 
+import movie.domain.money.Money
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

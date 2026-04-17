@@ -1,5 +1,7 @@
 package db
 
+import movie.db.DatabaseInitializer
+import movie.db.JdbcConnectorFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
