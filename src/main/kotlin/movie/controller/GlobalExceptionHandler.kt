@@ -12,4 +12,9 @@ class GlobalExceptionHandler {
     fun handleBadRequest(e: IllegalArgumentException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
     }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException::class)
+    fun handleJsonError(): ResponseEntity<Unit> {
+        return ResponseEntity.badRequest().build()
+    }
 }
