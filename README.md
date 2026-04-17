@@ -50,8 +50,8 @@
 ## 테스트 구현 목록
 
 1. 스키마 초기화 및 테스트
-   - [ ] 프로그램을 실행하면 MOVIE, SCREENING_SCHEDULE, RESERVATION, RESERVED_SEAT 테이블이 생성된다
-   - [ ] 최초 데이터 생성 후 프로그램을 재실행하면 기존에 저장된 데이터가 불러와진다
+   - [x] 프로그램을 실행하면 MOVIE, SCREENING_SCHEDULE, RESERVATION, RESERVED_SEAT 테이블이 생성된다
+   - [x] 최초 데이터 생성 후 프로그램을 재실행하면 기존에 저장된 데이터가 불러와진다
 
 2. MovieRepository 테스트
    - [x] DB에 저장된 모든 영화 정보가 Movie 객체 리스트로 반환된다
