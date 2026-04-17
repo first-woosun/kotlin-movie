@@ -6,7 +6,7 @@ import java.time.LocalDateTime
  * GET /api/movies 응답을 위한 최상위 DTO
  */
 data class MoviesResponse(
-    val movies: List<MovieDetailResponse>
+    val movies: List<MovieDetailResponse>,
 )
 
 /**
@@ -16,7 +16,7 @@ data class MovieDetailResponse(
     val id: Int,
     val title: String,
     val runningTimeMinutes: Int,
-    val screenings: List<ScreeningResponse>
+    val screenings: List<ScreeningResponse>,
 )
 
 /**
@@ -25,5 +25,5 @@ data class MovieDetailResponse(
 data class ScreeningResponse(
     val id: Int,
     val startAt: LocalDateTime,
-    val endAt: LocalDateTime
+    val endAt: LocalDateTime,
 )

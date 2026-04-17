@@ -3,12 +3,12 @@ package movie.controller.dto
 data class ReservationRequest(
     val reservations: List<SingleReservationRequest>,
     val usedPoints: Int,
-    val paymentMethod: String
+    val paymentMethod: String,
 )
 
 data class SingleReservationRequest(
     val screeningId: Int,
-    val seats: List<String>
+    val seats: List<String>,
 )
 
 data class ReservationResponse(
@@ -16,5 +16,5 @@ data class ReservationResponse(
     val reservations: List<SingleReservationRequest>,
     val usedPoints: Int,
     val paymentMethod: String,
-    val totalPrice: Int
+    val totalPrice: Int,
 )

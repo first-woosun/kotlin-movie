@@ -16,27 +16,30 @@ class MovieService(
 
         val schedulesByMovie = allSchedules.groupBy { it.getMovie() }
 
-        val movieDetailResponses = schedulesByMovie.map { (movie, schedules) ->
-            MovieDetailResponse(
-                id = movie.id ?: 0,
-                title = movie.title.title,
-                runningTimeMinutes = movie.runningTime.runningTime,
-                screenings = schedules.map { schedule ->
-                    ScreeningResponse(
-                        id = schedule.id ?: 0,
-
-                        startAt = LocalDateTime.of(
-                            schedule.getScreenTime().screeningDate,
-                            schedule.getScreenTime().startTime
-                        ),
-                        endAt = LocalDateTime.of(
-                            schedule.getScreenTime().screeningDate,
-                            schedule.getScreenTime().endTime
-                        )
-                    )
-                }
-            )
-        }
+        val movieDetailResponses =
+            schedulesByMovie.map { (movie, schedules) ->
+                MovieDetailResponse(
+                    id = movie.id ?: 0,
+                    title = movie.title.title,
+                    runningTimeMinutes = movie.runningTime.runningTime,
+                    screenings =
+                        schedules.map { schedule ->
+                            ScreeningResponse(
+                                id = schedule.id ?: 0,
+                                startAt =
+                                    LocalDateTime.of(
+                                        schedule.getScreenTime().screeningDate,
+                                        schedule.getScreenTime().startTime,
+                                    ),
+                                endAt =
+                                    LocalDateTime.of(
+                                        schedule.getScreenTime().screeningDate,
+                                        schedule.getScreenTime().endTime,
+                                    ),
+                            )
+                        },
+                )
+            }
 
         return MoviesResponse(movies = movieDetailResponses)
     }

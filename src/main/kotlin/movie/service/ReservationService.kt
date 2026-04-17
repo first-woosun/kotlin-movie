@@ -22,33 +22,35 @@ class ReservationService(
     private val cardDiscountPolicy: CardDiscountPolicy,
     private val cashDiscountPolicy: CashDiscountPolicy,
 ) {
-
     fun reserveAll(request: ReservationRequest): ReservationResponse {
-        val domainReservations = request.reservations.map { req ->
-            val screening = scheduleRepository.findById(req.screeningId)
-                ?: throw IllegalArgumentException("ID: ${req.screeningId}인 상영 일정을 찾을 수 없습니다.")
+        val domainReservations =
+            request.reservations.map { req ->
+                val screening =
+                    scheduleRepository.findById(req.screeningId)
+                        ?: throw IllegalArgumentException("ID: ${req.screeningId}인 상영 일정을 찾을 수 없습니다.")
 
-            val seats = req.seats.map { 
-                val row = it.take(1)
-                val col = it.substring(1).toInt()
-                Seat.create(RowNumber(row), ColumnNumber(col))
+                val seats =
+                    req.seats.map {
+                        val row = it.take(1)
+                        val col = it.substring(1).toInt()
+                        Seat.create(RowNumber(row), ColumnNumber(col))
+                    }
+
+                val reservedSeatsInDb = reservationRepository.findReservedSeatsByScheduleId(req.screeningId)
+                if (seats.any { it in reservedSeatsInDb }) {
+                    throw IllegalArgumentException("상영 ID ${req.screeningId}에 이미 예약된 좌석이 포함되어 있습니다.")
+                }
+
+                Reservation(
+                    scheduleId = req.screeningId,
+                    movie = screening.getMovie(),
+                    screenTime = screening.getScreenTime(),
+                    seats = seats,
+                )
             }
-
-            val reservedSeatsInDb = reservationRepository.findReservedSeatsByScheduleId(req.screeningId)
-            if (seats.any { it in reservedSeatsInDb }) {
-                throw IllegalArgumentException("상영 ID ${req.screeningId}에 이미 예약된 좌석이 포함되어 있습니다.")
-            }
-
-            Reservation(
-                scheduleId = req.screeningId,
-                movie = screening.getMovie(),
-                screenTime = screening.getScreenTime(),
-                seats = seats
-            )
-        }
 
         var totalBeforeFinalDiscount = Money(0)
-        domainReservations.forEach { 
+        domainReservations.forEach {
             totalBeforeFinalDiscount += it.price(timeDiscountPolicy, movieDayDiscountPolicy)
         }
 
@@ -74,16 +76,17 @@ class ReservationService(
             reservations = request.reservations,
             usedPoints = request.usedPoints,
             paymentMethod = request.paymentMethod,
-            totalPrice = finalPrice.amount
+            totalPrice = finalPrice.amount,
         )
     }
 
     private fun getPayMethodPolicy(method: String): PayMethodDiscountPolicy {
-        val payMethod = when (method) {
-            "CREDIT_CARD" -> PayMethod.CARD
-            "CASH" -> PayMethod.CASH
-            else -> throw IllegalArgumentException("지원하지 않는 결제 방식입니다: $method")
-        }
+        val payMethod =
+            when (method) {
+                "CREDIT_CARD" -> PayMethod.CARD
+                "CASH" -> PayMethod.CASH
+                else -> throw IllegalArgumentException("지원하지 않는 결제 방식입니다: $method")
+            }
         return PayMethod.toPolicy(payMethod, cardDiscountPolicy, cashDiscountPolicy)
     }
 }

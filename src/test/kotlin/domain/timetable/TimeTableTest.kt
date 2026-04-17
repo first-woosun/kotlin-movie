@@ -4,9 +4,9 @@ import movie.domain.movie.Movie
 import movie.domain.movie.itmes.RunningTime
 import movie.domain.movie.itmes.ScreeningPeriod
 import movie.domain.movie.itmes.Title
+import movie.domain.timetable.TimeTable
 import movie.domain.timetable.items.ScreenTime
 import movie.domain.timetable.items.ScreeningSchedule
-import movie.domain.timetable.TimeTable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

@@ -2,14 +2,14 @@ package movie.repository
 
 import movie.db.JdbcConnectorFactory
 import movie.domain.money.Money
-import movie.domain.reservations.items.Reservation
-import movie.domain.seat.Seat
-import movie.domain.seat.items.ColumnNumber
-import movie.domain.seat.items.RowNumber
 import movie.domain.movie.Movie
 import movie.domain.movie.itmes.RunningTime
 import movie.domain.movie.itmes.ScreeningPeriod
 import movie.domain.movie.itmes.Title
+import movie.domain.reservations.items.Reservation
+import movie.domain.seat.Seat
+import movie.domain.seat.items.ColumnNumber
+import movie.domain.seat.items.RowNumber
 import movie.domain.timetable.items.ScreenTime
 import org.springframework.stereotype.Repository
 import java.sql.Connection
@@ -150,8 +150,9 @@ class ReservationRepository(
             seats.add(
                 Seat.Companion.create(
                     RowNumber(rs.getString("row_number")),
-                    ColumnNumber(rs.getInt("column_number"))
-                ))
+                    ColumnNumber(rs.getInt("column_number")),
+                ),
+            )
         }
         return seats
     }

@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/movies")
 class MovieController(
-    private val movieService: MovieService
+    private val movieService: MovieService,
 ) {
     @GetMapping
     fun getMovies(): ResponseEntity<MoviesResponse> {
         val response = movieService.findAllMoviesWithScreenings()
-        return response.takeIf { it.movies.isNotEmpty() }
+        return response
+            .takeIf { it.movies.isNotEmpty() }
             ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.noContent().build()
     }

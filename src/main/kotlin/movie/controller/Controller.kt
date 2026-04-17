@@ -1,5 +1,11 @@
 package movie.controller
 
+import movie.domain.discountpolicy.CardDiscountPolicy
+import movie.domain.discountpolicy.CashDiscountPolicy
+import movie.domain.discountpolicy.MovieDayDiscountPolicy
+import movie.domain.discountpolicy.PayMethod
+import movie.domain.discountpolicy.PayMethodDiscountPolicy
+import movie.domain.discountpolicy.TimeDiscountPolicy
 import movie.domain.money.Money
 import movie.domain.movie.itmes.Title
 import movie.domain.point.Point
@@ -9,12 +15,6 @@ import movie.domain.seat.Seat
 import movie.domain.timetable.TimeTable
 import movie.domain.timetable.items.Screen
 import movie.domain.timetable.items.ScreeningSchedule
-import movie.domain.discountpolicy.CardDiscountPolicy
-import movie.domain.discountpolicy.CashDiscountPolicy
-import movie.domain.discountpolicy.MovieDayDiscountPolicy
-import movie.domain.discountpolicy.PayMethod
-import movie.domain.discountpolicy.PayMethodDiscountPolicy
-import movie.domain.discountpolicy.TimeDiscountPolicy
 import movie.parser.DateParser
 import movie.parser.SeatParser
 import movie.repository.MovieRepository

@@ -4,11 +4,11 @@ import movie.domain.movie.Movie
 import movie.domain.movie.itmes.RunningTime
 import movie.domain.movie.itmes.ScreeningPeriod
 import movie.domain.movie.itmes.Title
+import movie.domain.reservations.items.Reservation
 import movie.domain.seat.Seat
 import movie.domain.seat.items.ColumnNumber
 import movie.domain.seat.items.RowNumber
 import movie.domain.timetable.items.ScreenTime
-import movie.domain.reservations.items.Reservation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
