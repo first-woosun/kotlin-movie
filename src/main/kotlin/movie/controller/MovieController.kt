@@ -15,6 +15,8 @@ class MovieController(
     @GetMapping
     fun getMovies(): ResponseEntity<MoviesResponse> {
         val response = movieService.findAllMoviesWithScreenings()
-        return ResponseEntity.ok(response)
+        return response.takeIf { it.movies.isNotEmpty() }
+            ?.let { ResponseEntity.ok(it) }
+            ?: ResponseEntity.noContent().build()
     }
 }
