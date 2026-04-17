@@ -11,7 +11,10 @@ class DatabaseInitializerTest {
     @BeforeEach
     fun setUp() {
         // 완전한 격리를 위해 매번 새로운 인메모리 DB 사용
-        val uniqueName = java.util.UUID.randomUUID().toString()
+        val uniqueName =
+            java.util.UUID
+                .randomUUID()
+                .toString()
         connector = JdbcConnectorFactory("jdbc:h2:mem:$uniqueName;DB_CLOSE_DELAY=-1")
         initializer = DatabaseInitializer(connector)
     }
@@ -34,7 +37,7 @@ class DatabaseInitializerTest {
                 "MOVIE",
                 "SCREENING_SCHEDULE",
                 "RESERVATION",
-                "RESERVED_SEAT"
+                "RESERVED_SEAT",
             )
         }
     }
@@ -43,7 +46,7 @@ class DatabaseInitializerTest {
     fun `초기화를 여러 번 실행해도 데이터가 중복으로 삽입되지 않는다`() {
         // 실행 1
         initializer.initializeTable()
-        
+
         // 실행 2
         initializer.initializeTable()
 

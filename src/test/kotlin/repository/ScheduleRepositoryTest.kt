@@ -23,7 +23,7 @@ class ScheduleRepositoryTest {
     }
 
     @Test
-    fun `전체 상영 일정을 확인할 수 있다` () {
+    fun `전체 상영 일정을 확인할 수 있다`() {
         val timeTable = scheduleRepository.findAll()
 
         assertThat(timeTable.countSchedule()).isEqualTo(15)
@@ -32,7 +32,6 @@ class ScheduleRepositoryTest {
     @Test
     fun `제목을 통해 해당 영화의 상영 일정을 갖는 TimeTable객체를 반환한다`() {
         val timeTable = scheduleRepository.findAllByTitle(Title("살묵지"))
-
 
         assertThat(timeTable.countSchedule()).isEqualTo(5)
     }

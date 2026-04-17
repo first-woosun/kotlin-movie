@@ -12,25 +12,26 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class TimeTableTest {
-    private val timeTable = TimeTable(
-        listOf(
-            createSchedule(
-                title = "신바드의 모험",
-                startTime = LocalTime.of(11, 0),
-                screeningDate = LocalDate.of(2026, 4, 8)
+    private val timeTable =
+        TimeTable(
+            listOf(
+                createSchedule(
+                    title = "신바드의 모험",
+                    startTime = LocalTime.of(11, 0),
+                    screeningDate = LocalDate.of(2026, 4, 8),
+                ),
+                createSchedule(
+                    title = "신밧드의 모험",
+                    startTime = LocalTime.of(12, 0),
+                    screeningDate = LocalDate.of(2026, 4, 9),
+                ),
+                createSchedule(
+                    title = "신바드의 모험",
+                    startTime = LocalTime.of(14, 0),
+                    screeningDate = LocalDate.of(2026, 4, 9),
+                ),
             ),
-            createSchedule(
-                title = "신밧드의 모험",
-                startTime = LocalTime.of(12, 0),
-                screeningDate = LocalDate.of(2026, 4, 9)
-            ),
-            createSchedule(
-                title = "신바드의 모험",
-                startTime = LocalTime.of(14, 0),
-                screeningDate = LocalDate.of(2026, 4, 9)
-            )
         )
-    )
 
     @Test
     fun `영화 제목을 입력받아 입력값과 같은 영화 제목을 갖는 screening schedule의 목록을 TimeTable 형태로 반환한다`() {
@@ -63,20 +64,23 @@ class TimeTableTest {
     private fun createSchedule(
         title: String,
         startTime: LocalTime,
-        screeningDate: LocalDate
+        screeningDate: LocalDate,
     ) = ScreeningSchedule(
-        movie = Movie(
-            title = Title(title),
-            runningTime = RunningTime(120),
-            screeningPeriod = ScreeningPeriod(
-                startDate = LocalDate.of(2026, 4, 1),
-                endDate = LocalDate.of(2026, 4, 30)
-            )
-        ),
-        screenTime = ScreenTime(
-            startTime = startTime,
-            endTime = startTime.plusHours(1),
-            screeningDate = screeningDate
-        )
+        movie =
+            Movie(
+                title = Title(title),
+                runningTime = RunningTime(120),
+                screeningPeriod =
+                    ScreeningPeriod(
+                        startDate = LocalDate.of(2026, 4, 1),
+                        endDate = LocalDate.of(2026, 4, 30),
+                    ),
+            ),
+        screenTime =
+            ScreenTime(
+                startTime = startTime,
+                endTime = startTime.plusHours(1),
+                screeningDate = screeningDate,
+            ),
     )
 }

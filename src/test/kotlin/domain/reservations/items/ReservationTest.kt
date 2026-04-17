@@ -44,27 +44,32 @@ class ReservationTest {
         assertThat(result).isFalse()
     }
 
-    private fun createReservation() = Reservation(
-        movie = createMovie(),
-        screenTime = createScreenTime(),
-        seats = listOf(
-            Seat.create(RowNumber("A"), ColumnNumber(1)),
-            Seat.create(RowNumber("B"), ColumnNumber(1))
+    private fun createReservation() =
+        Reservation(
+            movie = createMovie(),
+            screenTime = createScreenTime(),
+            seats =
+                listOf(
+                    Seat.create(RowNumber("A"), ColumnNumber(1)),
+                    Seat.create(RowNumber("B"), ColumnNumber(1)),
+                ),
         )
-    )
 
-    private fun createMovie() = Movie(
-        title = Title("신바드의 모험"),
-        runningTime = RunningTime(120),
-        screeningPeriod = ScreeningPeriod(
-            startDate = LocalDate.of(2026, 4, 1),
-            endDate = LocalDate.of(2026, 4, 30)
+    private fun createMovie() =
+        Movie(
+            title = Title("신바드의 모험"),
+            runningTime = RunningTime(120),
+            screeningPeriod =
+                ScreeningPeriod(
+                    startDate = LocalDate.of(2026, 4, 1),
+                    endDate = LocalDate.of(2026, 4, 30),
+                ),
         )
-    )
 
-    private fun createScreenTime() = ScreenTime(
-        startTime = LocalTime.of(11, 0),
-        endTime = LocalTime.of(13, 0),
-        screeningDate = LocalDate.of(2026, 4, 10)
-    )
+    private fun createScreenTime() =
+        ScreenTime(
+            startTime = LocalTime.of(11, 0),
+            endTime = LocalTime.of(13, 0),
+            screeningDate = LocalDate.of(2026, 4, 10),
+        )
 }

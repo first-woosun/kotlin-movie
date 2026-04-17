@@ -2,7 +2,9 @@ package db
 
 import java.sql.Connection
 
-class DatabaseInitializer(private val connector: JdbcConnectorFactory) {
+class DatabaseInitializer(
+    private val connector: JdbcConnectorFactory,
+) {
     fun initializeTable() {
         connector.getConnection().use {
             createTables(it)
@@ -13,7 +15,8 @@ class DatabaseInitializer(private val connector: JdbcConnectorFactory) {
     private fun createTables(connection: Connection) {
         val statement = connection.createStatement()
 
-        statement.execute("""
+        statement.execute(
+            """
             CREATE TABLE IF NOT EXISTS MOVIE (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
@@ -21,9 +24,11 @@ class DatabaseInitializer(private val connector: JdbcConnectorFactory) {
                 start_date DATE NOT NULL,
                 end_date DATE NOT NULL
             )
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
-        statement.execute("""
+        statement.execute(
+            """
             CREATE TABLE IF NOT EXISTS SCREENING_SCHEDULE (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 movie_id INT NOT NULL,
@@ -32,18 +37,22 @@ class DatabaseInitializer(private val connector: JdbcConnectorFactory) {
                 screening_date DATE NOT NULL,
                 FOREIGN KEY (movie_id) REFERENCES MOVIE(id)
             )
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
-        statement.execute("""
+        statement.execute(
+            """
             CREATE TABLE IF NOT EXISTS RESERVATION (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 schedule_id INT NOT NULL,
                 total_price INT NOT NULL,
                 FOREIGN KEY (schedule_id) REFERENCES SCREENING_SCHEDULE(ID)
             )
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
-        statement.execute("""
+        statement.execute(
+            """
             CREATE TABLE IF NOT EXISTS RESERVED_SEAT (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 reservation_id INT NOT NULL,
@@ -51,7 +60,7 @@ class DatabaseInitializer(private val connector: JdbcConnectorFactory) {
                 column_number INT NOT NULL,
                 FOREIGN KEY (reservation_id) REFERENCES RESERVATION(id)
             )
-        """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -59,15 +68,18 @@ class DatabaseInitializer(private val connector: JdbcConnectorFactory) {
         val statement = connection.createStatement()
 
         val resultSet = statement.executeQuery("SELECT COUNT(*) FROM MOVIE")
-        if(resultSet.next() && resultSet.getInt(1) == 0) {
-            statement.execute("""
+        if (resultSet.next() && resultSet.getInt(1) == 0) {
+            statement.execute(
+                """
                 INSERT INTO MOVIE (title, running_time, start_date, end_date)
                 VALUES 
                     ('신바드의 모험', 120, '2026-04-01', '2026-04-30'),
                     ('아이언맨', 180, '2026-04-10', '2026-05-10'),
                     ('살묵지', 160, '2026-04-12', '2026-05-17')
-            """.trimIndent())
-            statement.execute("""
+                """.trimIndent(),
+            )
+            statement.execute(
+                """
                 INSERT INTO SCREENING_SCHEDULE (movie_id, start_time, end_time, screening_date)
                 VALUES 
                     (1, '10:00', '12:00', '2026-04-03'),
@@ -85,7 +97,8 @@ class DatabaseInitializer(private val connector: JdbcConnectorFactory) {
                     (3, '15:00', '17:00', '2026-04-03'),
                     (3, '17:30', '19:30', '2026-04-03'),
                     (3, '20:00', '22:00', '2026-04-03')
-            """.trimIndent())
+                """.trimIndent(),
+            )
         }
     }
 }

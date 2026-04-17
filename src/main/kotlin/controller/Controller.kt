@@ -55,14 +55,14 @@ class Controller(
         val dateSearchResult = searchMovieWithDate(titleSearchResult)
         val selectedSchedule = selectMovieSchedule(dateSearchResult, reservations)
         val selectedSeats = selectSeats(selectedSchedule)
-        
+
         reservations.addReservation(
             scheduleId = selectedSchedule.id!!,
             movie = selectedSchedule.getMovie(),
             screenTime = selectedSchedule.getScreenTime(),
             seats = selectedSeats,
         )
-        
+
         outputView.printAddReservation(
             Reservation(
                 scheduleId = selectedSchedule.id,
@@ -126,12 +126,12 @@ class Controller(
 
     private fun selectSeats(screeningSchedule: ScreeningSchedule): List<Seat> {
         val reservedSeatsInDb = reservationRepository.findReservedSeatsByScheduleId(screeningSchedule.id!!)
-        
+
         outputView.printSeatMap(Screen.seatMap)
         try {
             val seatNumbers = inputView.readSeatNumber()
             val seats = SeatParser.parse(seatNumbers)
-            
+
             if (screeningSchedule.isReservedSeat(seats) || seats.any { it in reservedSeatsInDb }) {
                 outputView.printError("이미 예매된 좌석입니다.")
                 return selectSeats(screeningSchedule)

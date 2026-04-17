@@ -6,7 +6,7 @@ import java.sql.DriverManager
 class JdbcConnectorFactory(
     private val url: String,
     private val user: String = "sa",
-    private val password: String = ""
+    private val password: String = "",
 ) {
     fun getConnection(): Connection = DriverManager.getConnection(url, user, password)
 

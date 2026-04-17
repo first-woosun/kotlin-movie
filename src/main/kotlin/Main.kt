@@ -15,10 +15,11 @@ fun main() {
     val scheduleRepository = ScheduleRepository(connector)
     val reservationRepository = ReservationRepository(connector)
 
-    val controller = Controller(
-        movieRepository = movieRepository,
-        scheduleRepository = scheduleRepository,
-        reservationRepository = reservationRepository
-    )
+    val controller =
+        Controller(
+            movieRepository = movieRepository,
+            scheduleRepository = scheduleRepository,
+            reservationRepository = reservationRepository,
+        )
     controller.run()
 }

@@ -11,16 +11,16 @@ import domain.timetable.items.ScreeningSchedule
 import java.sql.Date
 import java.sql.ResultSet
 import java.time.LocalDate
-import java.time.LocalTime
 
 class ScheduleRepository(
-    private val connector: JdbcConnectorFactory
+    private val connector: JdbcConnectorFactory,
 ) {
-    fun findAll(): TimeTable{
-        val sql = """
+    fun findAll(): TimeTable {
+        val sql =
+            """
             SELECT *
             FROM SCREENING_SCHEDULE s JOIN MOVIE m ON s.movie_id = m.id
-        """.trimIndent()
+            """.trimIndent()
         val schedules = mutableListOf<ScreeningSchedule>()
         connector.getConnection().use {
             val statement = it.createStatement()
@@ -33,11 +33,12 @@ class ScheduleRepository(
     }
 
     fun findAllByTitle(title: Title): TimeTable {
-        val sql = """
+        val sql =
+            """
             SELECT * 
             FROM SCREENING_SCHEDULE s JOIN MOVIE m ON s.movie_id = m.id
             WHERE m.title = ?
-        """.trimIndent()
+            """.trimIndent()
         val schedules = mutableListOf<ScreeningSchedule>()
         connector.getConnection().use {
             val statement = it.prepareStatement(sql)
@@ -53,11 +54,12 @@ class ScheduleRepository(
     }
 
     fun findAllByDate(date: LocalDate): TimeTable {
-        val sql = """
+        val sql =
+            """
             SELECT * 
             FROM SCREENING_SCHEDULE s JOIN MOVIE m ON s.movie_id = m.id
             WHERE s.screening_date = ?
-        """.trimIndent()
+            """.trimIndent()
         val schedules = mutableListOf<ScreeningSchedule>()
         connector.getConnection().use {
             val statement = it.prepareStatement(sql)
@@ -72,21 +74,24 @@ class ScheduleRepository(
     }
 
     private fun mapToScreeningSchedule(resultSet: ResultSet): ScreeningSchedule {
-        val movie = Movie(
-            id = resultSet.getInt("movie_id"),
-            title = Title(resultSet.getString("title")),
-            runningTime = RunningTime(resultSet.getInt("running_time")),
-            screeningPeriod = ScreeningPeriod(
-                startDate = resultSet.getDate("start_date").toLocalDate(),
-                endDate = resultSet.getDate("end_date").toLocalDate()
+        val movie =
+            Movie(
+                id = resultSet.getInt("movie_id"),
+                title = Title(resultSet.getString("title")),
+                runningTime = RunningTime(resultSet.getInt("running_time")),
+                screeningPeriod =
+                    ScreeningPeriod(
+                        startDate = resultSet.getDate("start_date").toLocalDate(),
+                        endDate = resultSet.getDate("end_date").toLocalDate(),
+                    ),
             )
-        )
 
-        val screenTime = ScreenTime(
-            startTime = resultSet.getTime("start_time").toLocalTime(),
-            endTime = resultSet.getTime("end_time").toLocalTime(),
-            screeningDate = resultSet.getDate("screening_date").toLocalDate()
-        )
+        val screenTime =
+            ScreenTime(
+                startTime = resultSet.getTime("start_time").toLocalTime(),
+                endTime = resultSet.getTime("end_time").toLocalTime(),
+                screeningDate = resultSet.getDate("screening_date").toLocalDate(),
+            )
         return ScreeningSchedule(resultSet.getInt("id"), movie, screenTime)
     }
 }

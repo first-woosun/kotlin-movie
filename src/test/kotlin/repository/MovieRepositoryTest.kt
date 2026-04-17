@@ -19,10 +19,10 @@ class MovieRepositoryTest {
     }
 
     @Test
-    fun `데이터베이스에 저장된 전체 영화 목록을 조회할 수 있다` () {
+    fun `데이터베이스에 저장된 전체 영화 목록을 조회할 수 있다`() {
         val movies = movieRepository.findAll()
 
-        assertThat(movies.map { it.getTitleText()}).containsExactlyInAnyOrder("신바드의 모험", "아이언맨", "살묵지")
+        assertThat(movies.map { it.getTitleText() }).containsExactlyInAnyOrder("신바드의 모험", "아이언맨", "살묵지")
     }
 
     @Test

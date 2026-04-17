@@ -30,24 +30,25 @@ class ReservationRepositoryTest {
         val initializer = DatabaseInitializer(connector)
         initializer.initializeTable()
         clearDatabaseMemory()
-        
+
         // 중요: 테스트 기초 데이터를 준비하고 반환된 ID를 저장합니다.
         testScheduleId = prepareTestData()
-        
+
         reservationRepository = ReservationRepository(connector)
     }
 
     @Test
     fun `예매 정보와 좌석 목록을 저장하면 DB에 정상적으로 기록된다`() {
-        val seats = listOf(
-            Seat.create(RowNumber("A"), ColumnNumber(1)),
-            Seat.create(RowNumber("A"), ColumnNumber(2))
-        )
+        val seats =
+            listOf(
+                Seat.create(RowNumber("A"), ColumnNumber(1)),
+                Seat.create(RowNumber("A"), ColumnNumber(2)),
+            )
         val reservation = createReservation(seats)
         val totalPrice = Money(30000)
-        
+
         reservationRepository.save(testScheduleId, reservation, totalPrice)
-        
+
         val reservedSeats = reservationRepository.findReservedSeatsByScheduleId(testScheduleId)
         assertThat(reservedSeats.map { it.getSeatNumber() }).containsExactly("A1", "A2")
     }
@@ -56,15 +57,21 @@ class ReservationRepositoryTest {
     fun `특정 상영 일정에 예약된 모든 좌석 목록을 조회할 수 있다`() {
         val totalPrice = Money(15000)
 
-        val reservation1 = createReservation(listOf(
-            Seat.create(RowNumber("A"), ColumnNumber(1)),
-            Seat.create(RowNumber("A"), ColumnNumber(2))
-        ))
+        val reservation1 =
+            createReservation(
+                listOf(
+                    Seat.create(RowNumber("A"), ColumnNumber(1)),
+                    Seat.create(RowNumber("A"), ColumnNumber(2)),
+                ),
+            )
         reservationRepository.save(testScheduleId, reservation1, totalPrice)
 
-        val reservation2 = createReservation(listOf(
-            Seat.create(RowNumber("B"), ColumnNumber(1))
-        ))
+        val reservation2 =
+            createReservation(
+                listOf(
+                    Seat.create(RowNumber("B"), ColumnNumber(1)),
+                ),
+            )
         reservationRepository.save(testScheduleId, reservation2, totalPrice)
 
         val reservedSeats = reservationRepository.findReservedSeatsByScheduleId(testScheduleId)
@@ -113,21 +120,23 @@ class ReservationRepositoryTest {
 
     private fun prepareTestData(): Int {
         connector.getConnection().use { conn ->
-            val movieStatement = conn.prepareStatement(
-                "INSERT INTO MOVIE (title, running_time, start_date, end_date) VALUES ('테스트', 120, '2026-04-10', '2026-04-30')",
-                Statement.RETURN_GENERATED_KEYS
-            )
+            val movieStatement =
+                conn.prepareStatement(
+                    "INSERT INTO MOVIE (title, running_time, start_date, end_date) VALUES ('테스트', 120, '2026-04-10', '2026-04-30')",
+                    Statement.RETURN_GENERATED_KEYS,
+                )
             movieStatement.executeUpdate()
             val movieRs = movieStatement.generatedKeys
-            val movieId = if(movieRs.next()) movieRs.getInt(1) else -1
+            val movieId = if (movieRs.next()) movieRs.getInt(1) else -1
 
-            val scheduleStatement = conn.prepareStatement(
-                "INSERT INTO SCREENING_SCHEDULE (movie_id, start_time, end_time, screening_date) VALUES (?, '10:00', '12:00', '2026-05-01')",
-                Statement.RETURN_GENERATED_KEYS
-            )
+            val scheduleStatement =
+                conn.prepareStatement(
+                    "INSERT INTO SCREENING_SCHEDULE (movie_id, start_time, end_time, screening_date) VALUES (?, '10:00', '12:00', '2026-05-01')",
+                    Statement.RETURN_GENERATED_KEYS,
+                )
             scheduleStatement.setInt(1, movieId)
             scheduleStatement.executeUpdate()
-            
+
             val scheduleRs = scheduleStatement.generatedKeys
             return if (scheduleRs.next()) scheduleRs.getInt(1) else -1
         }
@@ -150,8 +159,8 @@ class ReservationRepositoryTest {
         val screenTime = ScreenTime(LocalTime.of(10, 0), LocalTime.of(12, 0), LocalDate.of(2026, 5, 1))
         return Reservation(
             movie = movie,
-            screenTime =  screenTime,
-            seats = seats
+            screenTime = screenTime,
+            seats = seats,
         )
     }
 }

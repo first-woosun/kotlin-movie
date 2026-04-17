@@ -9,8 +9,14 @@ import domain.seat.items.RowNumber
 import java.sql.Connection
 import java.sql.Statement
 
-class ReservationRepository(private val connector: JdbcConnectorFactory) {
-    fun save(scheduleId: Int, reservation: Reservation, totalPrice: Money) {
+class ReservationRepository(
+    private val connector: JdbcConnectorFactory,
+) {
+    fun save(
+        scheduleId: Int,
+        reservation: Reservation,
+        totalPrice: Money,
+    ) {
         val reservationInfo = reservation.getReservationInfo()
         val seats = reservationInfo.seats
 
@@ -28,11 +34,12 @@ class ReservationRepository(private val connector: JdbcConnectorFactory) {
     }
 
     fun findReservedSeatsByScheduleId(scheduleId: Int): List<Seat> {
-        val sql = """
+        val sql =
+            """
             SELECT rs.row_number, rs.column_number
             FROM RESERVED_SEAT rs JOIN RESERVATION r on rs.reservation_id = r.id
             WHERE r.schedule_id = ?
-        """.trimIndent()
+            """.trimIndent()
         val reservedSeats = mutableListOf<Seat>()
         connector.getConnection().use { conn ->
             val statement = conn.prepareStatement(sql)
@@ -42,15 +49,19 @@ class ReservationRepository(private val connector: JdbcConnectorFactory) {
                 reservedSeats.add(
                     Seat.create(
                         RowNumber(resultSet.getString("row_number")),
-                        ColumnNumber(resultSet.getInt("column_number"))
-                    )
+                        ColumnNumber(resultSet.getInt("column_number")),
+                    ),
                 )
             }
         }
         return reservedSeats
     }
 
-    private fun insertReservation(conn: Connection, scheduleId: Int, price: Int): Int {
+    private fun insertReservation(
+        conn: Connection,
+        scheduleId: Int,
+        price: Int,
+    ): Int {
         val sql = "INSERT INTO RESERVATION (schedule_id, total_price) VALUES (?, ?)"
         val statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         statement.setInt(1, scheduleId)
@@ -61,7 +72,11 @@ class ReservationRepository(private val connector: JdbcConnectorFactory) {
         return if (resultKey.next()) resultKey.getInt(1) else throw IllegalArgumentException("예매 ID 생성 실패")
     }
 
-    private fun insertReservedSeats(conn: Connection, reservationId: Int, seats: List<Seat>) {
+    private fun insertReservedSeats(
+        conn: Connection,
+        reservationId: Int,
+        seats: List<Seat>,
+    ) {
         val sql = "INSERT INTO RESERVED_SEAT (reservation_id, row_number, column_number) VALUES (?, ?, ?)"
         val statement = conn.prepareStatement(sql)
 
@@ -74,14 +89,15 @@ class ReservationRepository(private val connector: JdbcConnectorFactory) {
     }
 
     fun findAllByDate(date: java.time.LocalDate): List<Reservation> {
-        val sql = """
+        val sql =
+            """
             SELECT r.id, r.total_price, s.id as schedule_id, s.start_time, s.end_time, s.screening_date,
                    m.id as movie_id, m.title, m.running_time, m.start_date as movie_start, m.end_date as movie_end
             FROM RESERVATION r
             JOIN SCREENING_SCHEDULE s ON r.schedule_id = s.id
             JOIN MOVIE m ON s.movie_id = m.id
             WHERE s.screening_date = ?
-        """.trimIndent()
+            """.trimIndent()
 
         val reservations = mutableListOf<Reservation>()
         connector.getConnection().use { conn ->
@@ -93,24 +109,29 @@ class ReservationRepository(private val connector: JdbcConnectorFactory) {
                 val resId = rs.getInt("id")
                 val seats = findSeatsByReservationId(conn, resId)
 
-                val movie = domain.movie.Movie(
-                    rs.getInt("movie_id"),
-                    domain.movie.itmes.Title(rs.getString("title")),
-                    domain.movie.itmes.RunningTime(rs.getInt("running_time")),
-                    domain.movie.itmes.ScreeningPeriod(rs.getDate("movie_start").toLocalDate(), rs.getDate("movie_end").toLocalDate())
-                )
-                val screenTime = domain.timetable.items.ScreenTime(
-                    rs.getTime("start_time").toLocalTime(),
-                    rs.getTime("end_time").toLocalTime(),
-                    rs.getDate("screening_date").toLocalDate()
-                )
+                val movie =
+                    domain.movie.Movie(
+                        rs.getInt("movie_id"),
+                        domain.movie.itmes.Title(rs.getString("title")),
+                        domain.movie.itmes.RunningTime(rs.getInt("running_time")),
+                        domain.movie.itmes.ScreeningPeriod(rs.getDate("movie_start").toLocalDate(), rs.getDate("movie_end").toLocalDate()),
+                    )
+                val screenTime =
+                    domain.timetable.items.ScreenTime(
+                        rs.getTime("start_time").toLocalTime(),
+                        rs.getTime("end_time").toLocalTime(),
+                        rs.getDate("screening_date").toLocalDate(),
+                    )
                 reservations.add(Reservation(id = resId, movie = movie, screenTime = screenTime, seats = seats))
             }
         }
         return reservations
     }
 
-    private fun findSeatsByReservationId(conn: java.sql.Connection, reservationId: Int): List<Seat> {
+    private fun findSeatsByReservationId(
+        conn: java.sql.Connection,
+        reservationId: Int,
+    ): List<Seat> {
         val sql = "SELECT row_number, column_number FROM RESERVED_SEAT WHERE reservation_id = ?"
         val seats = mutableListOf<Seat>()
         val pstmt = conn.prepareStatement(sql)

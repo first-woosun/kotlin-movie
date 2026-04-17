@@ -7,7 +7,9 @@ import domain.movie.itmes.ScreeningPeriod
 import domain.movie.itmes.Title
 import java.sql.ResultSet
 
-class MovieRepository(private val connector: JdbcConnectorFactory) {
+class MovieRepository(
+    private val connector: JdbcConnectorFactory,
+) {
     fun findAll(): List<Movie> {
         val movies = mutableListOf<Movie>()
         val sql = "SELECT * FROM MOVIE"
@@ -41,14 +43,14 @@ class MovieRepository(private val connector: JdbcConnectorFactory) {
         }
     }
 
-    private fun mapToMovie(resultSet: ResultSet): Movie {
-        return Movie(
+    private fun mapToMovie(resultSet: ResultSet): Movie =
+        Movie(
             title = Title(resultSet.getString("title")),
             runningTime = RunningTime(resultSet.getInt("running_time")),
-            screeningPeriod = ScreeningPeriod(
-                startDate = resultSet.getDate("start_date").toLocalDate(),
-                endDate = resultSet.getDate("end_date").toLocalDate()
-            )
+            screeningPeriod =
+                ScreeningPeriod(
+                    startDate = resultSet.getDate("start_date").toLocalDate(),
+                    endDate = resultSet.getDate("end_date").toLocalDate(),
+                ),
         )
-    }
 }
