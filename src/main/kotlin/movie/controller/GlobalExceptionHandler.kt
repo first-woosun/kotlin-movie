@@ -10,6 +10,6 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleBadRequest(e: IllegalArgumentException): ResponseEntity<Unit> {
-        return ResponseEntity.noContent().build()
+        return ResponseEntity.badRequest().build()
     }
 }
